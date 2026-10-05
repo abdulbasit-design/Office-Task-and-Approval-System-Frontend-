@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import type { ActivityLogEntry } from "@/lib/api/taskApi";
+import { useGetUsersQuery } from "@/lib/api/userApi";
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 function formatDateTime(iso: string): string {
@@ -113,6 +114,9 @@ interface TaskActivityProps {
 
 // ── Component ─────────────────────────────────────────────────────────────
 export default function TaskActivity({ activityLog, timestamps }: TaskActivityProps) {
+  const { data: users = [] } = useGetUsersQuery();
+  const usersMap = useMemo(() => new Map(users.map((u) => [u.id, u.full_name])), [users]);
+
   if (!activityLog || activityLog.length === 0) {
     return (
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-6">
@@ -147,6 +151,7 @@ export default function TaskActivity({ activityLog, timestamps }: TaskActivityPr
           const meta = getActionMeta(entry.action);
           const ts = getTimestamp(entry.action, i);
           const isLast = i === activityLog.length - 1;
+          const actorName = entry.user_name || usersMap.get(entry.user_id) || `User #${entry.user_id}`;
 
           return (
             <li key={i} className="relative flex gap-3 pb-5 last:pb-0">
@@ -170,7 +175,7 @@ export default function TaskActivity({ activityLog, timestamps }: TaskActivityPr
               <div className="flex-1 min-w-0 pt-0.5">
                 <p className="text-xs font-semibold text-slate-800">{meta.label}</p>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  User #{entry.user_id}
+                  <span className="font-medium text-slate-600">{actorName}</span>
                   {ts && <> · {ts}</>}
                 </p>
               </div>

@@ -20,6 +20,7 @@ export interface UserResponse {
   manager_id: number | null;
   is_active: boolean;
   joined_at: string;  // ISO 8601 datetime string
+  department_name?: string | null;
 }
 
 /**

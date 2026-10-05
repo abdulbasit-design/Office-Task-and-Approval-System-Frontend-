@@ -175,13 +175,12 @@ export default function LoginForm() {
             <label htmlFor="login-password" className="text-xs font-semibold text-slate-700">
               Password <span className="text-red-500 font-bold">*</span>
             </label>
-            <a
-              href="#forgot-password"
-              onClick={(e) => { e.preventDefault(); alert("Password reset is managed by your administrator."); }}
+            <Link
+              href="/forgot-password"
               className="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline"
             >
               Forgot password?
-            </a>
+            </Link>
           </div>
           <div className="relative">
             <input

@@ -10,13 +10,15 @@ import NotificationBadge from "@/components/notifications/NotificationBadge";
 
 // ── Page title map ────────────────────────────────────────────────────────
 const PAGE_TITLES: Record<string, string> = {
-  "/dashboard":     "Dashboard",
-  "/tasks":         "Tasks",
-  "/notifications": "Notifications",
-  "/users":         "Users",
-  "/departments":   "Departments",
-  "/profile":       "Profile",
+  "/dashboard":               "Dashboard",
+  "/tasks":                   "Tasks",
+  "/notifications":           "Notifications",
+  "/users":                   "Users",
+  "/password-reset-requests": "Password Reset Requests",
+  "/departments":             "Departments",
+  "/profile":                 "Profile",
 };
+
 
 function getPageTitle(pathname: string): string {
   if (PAGE_TITLES[pathname]) return PAGE_TITLES[pathname];

@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import type { TaskCreate, TaskUpdate, TaskResponse } from "@/lib/api/taskApi";
+import { useGetUsersQuery } from "@/lib/api/userApi";
+import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -81,6 +83,22 @@ export default function TaskForm({
   submitLabel = "Save Task",
   onCancel,
 }: TaskFormProps) {
+  // Fetch users and departments so assignees can be chosen by name
+  const { data: users = [], isLoading: isUsersLoading } = useGetUsersQuery();
+  const { data: departments = [] } = useGetDepartmentsQuery();
+
+  const deptMap = useMemo(() => {
+    const map: Record<number, string> = {};
+    departments.forEach((d) => {
+      map[d.id] = d.name;
+    });
+    return map;
+  }, [departments]);
+
+  const activeUsers = useMemo(() => {
+    return users.filter((u) => u.is_active);
+  }, [users]);
+
   // ── Field state ────────────────────────────────────────────────────────────
   const [title, setTitle] = useState(initialValues?.title ?? "");
   const [description, setDescription] = useState(initialValues?.description ?? "");
@@ -113,9 +131,9 @@ export default function TaskForm({
     }
 
     if (!assignedTo.trim()) {
-      next.assignedTo = "Assignee user ID is required.";
+      next.assignedTo = "Please select an assignee.";
     } else if (isNaN(Number(assignedTo)) || !Number.isInteger(Number(assignedTo)) || Number(assignedTo) <= 0) {
-      next.assignedTo = "Please enter a valid positive integer user ID.";
+      next.assignedTo = "Please select a valid assignee.";
     }
 
     if (!deadline) {
@@ -208,25 +226,37 @@ export default function TaskForm({
         />
       </div>
 
-      {/* Assigned To (user ID) */}
+      {/* Assigned To (User Select by Name) */}
       <div>
-        <Label htmlFor="task-assigned-to" required>Assign To (User ID)</Label>
-        <input
-          id="task-assigned-to"
-          type="number"
-          min={1}
-          step={1}
-          value={assignedTo}
-          onChange={(e) => {
-            setAssignedTo(e.target.value);
-            if (errors.assignedTo) setErrors((p) => ({ ...p, assignedTo: undefined }));
-          }}
-          placeholder="e.g. 42"
-          className={inputClass(errors.assignedTo)}
-          disabled={isLoading}
-        />
+        <Label htmlFor="task-assigned-to" required>Assign To (Employee / User)</Label>
+        {isUsersLoading ? (
+          <div className="h-10 bg-slate-100 rounded-xl animate-pulse" />
+        ) : (
+          <div className="relative">
+            <select
+              id="task-assigned-to"
+              value={assignedTo}
+              onChange={(e) => {
+                setAssignedTo(e.target.value);
+                if (errors.assignedTo) setErrors((p) => ({ ...p, assignedTo: undefined }));
+              }}
+              className={inputClass(errors.assignedTo)}
+              disabled={isLoading}
+            >
+              <option value="">Select an assignee by name...</option>
+              {activeUsers.map((u) => {
+                const dept = u.department_name || (u.department_id ? deptMap[u.department_id] : null);
+                return (
+                  <option key={u.id} value={u.id}>
+                    {u.full_name} ({u.role}{dept ? ` · ${dept}` : ""})
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        )}
         <p className="mt-1 text-[11px] text-slate-400">
-          Enter the numeric user ID of the employee to assign this task to.
+          Select the employee or colleague by name to assign this task to.
         </p>
         <FieldError msg={errors.assignedTo} />
       </div>

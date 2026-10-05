@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useGetMeQuery } from "@/lib/api/authApi";
 
 // ── Nav Item Type ─────────────────────────────────────────────────────
 interface NavItem {
@@ -48,6 +49,15 @@ function UsersIcon({ className }: { className?: string }) {
   );
 }
 
+function KeyIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+        d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+    </svg>
+  );
+}
+
 function DepartmentsIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -83,16 +93,6 @@ function BrandLogo() {
   );
 }
 
-// ── Nav Items Config ──────────────────────────────────────────────────
-const NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard",     href: "/dashboard",     icon: <DashboardIcon     className="w-5 h-5" /> },
-  { label: "Tasks",         href: "/tasks",         icon: <TasksIcon         className="w-5 h-5" /> },
-  { label: "Notifications", href: "/notifications", icon: <NotificationsIcon className="w-5 h-5" /> },
-  { label: "Users",         href: "/users",         icon: <UsersIcon         className="w-5 h-5" /> },
-  { label: "Departments",   href: "/departments",   icon: <DepartmentsIcon   className="w-5 h-5" /> },
-  { label: "Profile",       href: "/profile",       icon: <ProfileIcon       className="w-5 h-5" /> },
-];
-
 // ── Props ─────────────────────────────────────────────────────────────
 interface SidebarProps {
   /** Whether the mobile drawer is open */
@@ -104,6 +104,23 @@ interface SidebarProps {
 // ── Sidebar ───────────────────────────────────────────────────────────
 export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const { data: currentUser } = useGetMeQuery();
+
+  const isAdmin = currentUser?.role === "admin";
+
+  const navItems: NavItem[] = [
+    { label: "Dashboard",     href: "/dashboard",     icon: <DashboardIcon     className="w-5 h-5" /> },
+    { label: "Tasks",         href: "/tasks",         icon: <TasksIcon         className="w-5 h-5" /> },
+    { label: "Notifications", href: "/notifications", icon: <NotificationsIcon className="w-5 h-5" /> },
+    ...(isAdmin
+      ? [
+          { label: "Users",           href: "/users",                   icon: <UsersIcon         className="w-5 h-5" /> },
+          { label: "Departments",     href: "/departments",             icon: <DepartmentsIcon   className="w-5 h-5" /> },
+          { label: "Password Resets", href: "/password-reset-requests", icon: <KeyIcon           className="w-5 h-5" /> },
+        ]
+      : []),
+    { label: "Profile",       href: "/profile",       icon: <ProfileIcon       className="w-5 h-5" /> },
+  ];
 
   const navContent = (
     <nav aria-label="Main navigation" className="flex flex-col h-full">
@@ -118,8 +135,9 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
       {/* Nav Items */}
       <ul className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto" role="list">
-        {NAV_ITEMS.map((item) => {
+        {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+
           return (
             <li key={item.href}>
               <Link

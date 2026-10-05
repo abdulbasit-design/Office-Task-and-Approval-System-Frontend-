@@ -11,6 +11,7 @@ import { apiSlice } from "./apiSlice";
 export interface ActivityLogEntry {
   action: string;
   user_id: number;
+  user_name?: string | null;
 }
 
 export interface TaskResponse {
@@ -29,6 +30,10 @@ export interface TaskResponse {
   rejection_reason: string | null;
   activity_log: ActivityLogEntry[];
   created_at: string;           // ISO 8601 datetime string
+  assigned_to_name?: string | null;
+  created_by_name?: string | null;
+  approved_by_name?: string | null;
+  department_name?: string | null;
 }
 
 /**

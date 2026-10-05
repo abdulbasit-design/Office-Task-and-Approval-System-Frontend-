@@ -42,6 +42,28 @@ export interface LogoutResponse {
   message: string;
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface GenericMessageResponse {
+  message: string;
+}
+
+export interface PasswordResetRequestItem {
+  id: number;
+  user_id: number;
+  full_name: string;
+  email: string;
+  role: string;
+  status: string;
+  requested_at: string | null;
+}
+
+export interface AdminResetPasswordRequest {
+  new_password: string;
+}
+
 /**
  * Auth API endpoints injected into the central apiSlice.
  *
@@ -53,6 +75,9 @@ export interface LogoutResponse {
  *                      No body required from the frontend.
  * POST /auth/logout  → { message }
  *                      Backend deletes the refresh_token cookie.
+ * POST /auth/forgot-password → { message }
+ * GET  /auth/password-reset-requests → PasswordResetRequestItem[]
+ * POST /auth/password-reset-requests/{id}/reset → { message }
  */
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -109,6 +134,45 @@ export const authApi = apiSlice.injectEndpoints({
       providesTags: ["Auth"],
       keepUnusedDataFor: 0,
     }),
+
+    /**
+     * Forgot Password request.
+     * POST /auth/forgot-password
+     * Generates a password-reset request on the backend if user exists.
+     * Returns a generic response in all cases to prevent email enumeration.
+     */
+    forgotPassword: builder.mutation<GenericMessageResponse, ForgotPasswordRequest>({
+      query: (body) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    /**
+     * Admin: View pending password-reset requests.
+     * GET /auth/password-reset-requests
+     */
+    getPasswordResetRequests: builder.query<PasswordResetRequestItem[], void>({
+      query: () => "/auth/password-reset-requests",
+      providesTags: ["PasswordResetRequests"],
+    }),
+
+    /**
+     * Admin: Reset a user's password.
+     * POST /auth/password-reset-requests/{requestId}/reset
+     */
+    adminResetPassword: builder.mutation<
+      GenericMessageResponse,
+      { requestId: number; new_password: string }
+    >({
+      query: ({ requestId, new_password }) => ({
+        url: `/auth/password-reset-requests/${requestId}/reset`,
+        method: "POST",
+        body: { new_password },
+      }),
+      invalidatesTags: ["PasswordResetRequests"],
+    }),
   }),
   overrideExisting: false,
 });
@@ -119,5 +183,9 @@ export const {
   useRefreshTokenMutation,
   useLogoutMutation,
   useGetMeQuery,
+  useForgotPasswordMutation,
+  useGetPasswordResetRequestsQuery,
+  useAdminResetPasswordMutation,
 } = authApi;
+
 

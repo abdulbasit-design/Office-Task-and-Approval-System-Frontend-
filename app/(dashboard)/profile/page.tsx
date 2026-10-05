@@ -42,16 +42,14 @@ export default function ProfilePage() {
     refetch,
   } = useGetMeQuery();
 
-  const isAdmin = user?.role === "admin";
-
-  // Attempt to resolve department name (admin only in backend)
+  // Resolve department name
   const { data: department } = useGetDepartmentQuery(user?.department_id || 0, {
-    skip: !user?.department_id || !isAdmin,
+    skip: !user?.department_id,
   });
 
-  // Attempt to resolve manager name (admin only in backend)
+  // Resolve manager name
   const { data: manager } = useGetUserQuery(user?.manager_id || 0, {
-    skip: !user?.manager_id || !isAdmin,
+    skip: !user?.manager_id,
   });
 
   if (isUserLoading) {
@@ -90,7 +88,7 @@ export default function ProfilePage() {
   const departmentDisplay = department
     ? department.name
     : user.department_id
-    ? `Department #${user.department_id}`
+    ? (user as { department_name?: string | null }).department_name || `Department #${user.department_id}`
     : null;
 
   const managerDisplay = manager

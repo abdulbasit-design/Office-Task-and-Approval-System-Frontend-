@@ -17,7 +17,8 @@ export type NotificationType =
   | "TASK_SUBMITTED"
   | "TASK_RESUBMITTED"
   | "TASK_APPROVED"
-  | "TASK_REJECTED";
+  | "TASK_REJECTED"
+  | "PASSWORD_RESET_REQUEST";
 
 /**
  * NotificationResponse — matches FastAPI NotificationResponse schema exactly.

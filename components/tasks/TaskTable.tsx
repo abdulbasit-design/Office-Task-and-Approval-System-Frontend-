@@ -73,9 +73,10 @@ export default function TaskTable({ tasks, isLoading = false }: TaskTableProps) 
           <thead className="bg-slate-50/70 border-b border-slate-100 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
             <tr>
               <th scope="col" className="px-5 py-3.5">Task</th>
-              <th scope="col" className="px-4 py-3.5 hidden sm:table-cell">Status</th>
-              <th scope="col" className="px-4 py-3.5 hidden md:table-cell">Priority</th>
-              <th scope="col" className="px-4 py-3.5 hidden lg:table-cell">Deadline</th>
+              <th scope="col" className="px-4 py-3.5 hidden sm:table-cell">Assigned To</th>
+              <th scope="col" className="px-4 py-3.5 hidden md:table-cell">Status</th>
+              <th scope="col" className="px-4 py-3.5 hidden lg:table-cell">Priority</th>
+              <th scope="col" className="px-4 py-3.5 hidden xl:table-cell">Deadline</th>
               <th scope="col" className="px-5 py-3.5 text-right">View</th>
             </tr>
           </thead>
@@ -111,8 +112,11 @@ export default function TaskTable({ tasks, isLoading = false }: TaskTableProps) 
                           {task.description}
                         </p>
                       )}
-                      {/* Mobile: show badges inline */}
+                      {/* Mobile: show assignee + badges inline */}
                       <div className="flex items-center gap-2 mt-1.5 sm:hidden flex-wrap">
+                        <span className="text-[11px] text-slate-600 font-medium">
+                          {task.assigned_to_name || `User #${task.assigned_to}`}
+                        </span>
                         <StatusBadge status={task.status} />
                         <PriorityBadge priority={task.priority} />
                         {overdue && (
@@ -121,6 +125,18 @@ export default function TaskTable({ tasks, isLoading = false }: TaskTableProps) 
                           </span>
                         )}
                       </div>
+                    </td>
+
+                    {/* Assigned To */}
+                    <td className="px-4 py-4 whitespace-nowrap hidden sm:table-cell">
+                      <div className="font-medium text-slate-800 text-xs">
+                        {task.assigned_to_name || `User #${task.assigned_to}`}
+                      </div>
+                      {task.department_name && (
+                        <span className="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded font-medium border border-blue-100 mt-0.5 inline-block">
+                          {task.department_name}
+                        </span>
+                      )}
                     </td>
 
                     {/* Status */}

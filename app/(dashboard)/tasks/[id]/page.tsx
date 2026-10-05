@@ -10,6 +10,8 @@ import {
   useRejectTaskMutation,
   useUpdateTaskMutation,
 } from "@/lib/api/taskApi";
+import { useGetUsersQuery } from "@/lib/api/userApi";
+import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
 import { StatusBadge, PriorityBadge } from "@/components/tasks/TaskStatusBadge";
 import TaskActivity from "@/components/tasks/TaskActivity";
 import TaskForm from "@/components/tasks/TaskForm";
@@ -189,6 +191,24 @@ export default function TaskDetailPage() {
     skip: isNaN(taskId),
   });
 
+  const { data: users = [] } = useGetUsersQuery();
+  const { data: departments = [] } = useGetDepartmentsQuery();
+
+  const usersMap = React.useMemo(() => {
+    const map: Record<number, { name: string; department?: string }> = {};
+    const deptMap: Record<number, string> = {};
+    departments.forEach((d) => {
+      deptMap[d.id] = d.name;
+    });
+    users.forEach((u) => {
+      map[u.id] = {
+        name: u.full_name,
+        department: u.department_name || (u.department_id ? deptMap[u.department_id] : undefined),
+      };
+    });
+    return map;
+  }, [users, departments]);
+
   const [submitTask, { isLoading: isSubmitting }] = useSubmitTaskMutation();
   const [approveTask, { isLoading: isApproving }] = useApproveTaskMutation();
   const [rejectTask, { isLoading: isRejecting }] = useRejectTaskMutation();
@@ -361,8 +381,29 @@ export default function TaskDetailPage() {
               {/* Details */}
               <div className="px-6 py-2">
                 <DetailRow label="Description" value={task.description || <span className="text-slate-400 italic">No description provided.</span>} />
-                <DetailRow label="Assigned To" value={`User #${task.assigned_to}`} />
-                <DetailRow label="Created By" value={`User #${task.created_by}`} />
+                <DetailRow
+                  label="Assigned To"
+                  value={
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-semibold text-slate-800">
+                        {task.assigned_to_name || usersMap[task.assigned_to]?.name || `User #${task.assigned_to}`}
+                      </span>
+                      {(task.department_name || usersMap[task.assigned_to]?.department) && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                          {task.department_name || usersMap[task.assigned_to]?.department}
+                        </span>
+                      )}
+                    </div>
+                  }
+                />
+                <DetailRow
+                  label="Created By"
+                  value={
+                    <span className="font-medium text-slate-800">
+                      {task.created_by_name || usersMap[task.created_by]?.name || `User #${task.created_by}`}
+                    </span>
+                  }
+                />
                 <DetailRow label="Deadline" value={formatDateTime(task.deadline)} />
                 <DetailRow label="Created At" value={formatDateTime(task.created_at)} />
               </div>
@@ -457,7 +498,8 @@ export default function TaskDetailPage() {
                 </p>
                 {task.approved_by && (
                   <p className="text-xs text-emerald-700">
-                    <span className="font-semibold">Approved by:</span> User #{task.approved_by}
+                    <span className="font-semibold">Approved by:</span>{" "}
+                    {task.approved_by_name || usersMap[task.approved_by]?.name || `User #${task.approved_by}`}
                   </p>
                 )}
               </div>

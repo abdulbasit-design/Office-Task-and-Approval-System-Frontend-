@@ -61,6 +61,21 @@ export default function TaskCard({ task }: TaskCardProps) {
         </p>
       )}
 
+      {/* Assignee & Department */}
+      {(task.assigned_to_name || task.department_name) && (
+        <div className="flex items-center gap-1.5 text-xs text-slate-600">
+          <svg className="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span className="font-medium text-slate-700 truncate">{task.assigned_to_name || `User #${task.assigned_to}`}</span>
+          {task.department_name && (
+            <span className="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 font-medium shrink-0">
+              {task.department_name}
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Deadline */}
       <div className={`flex items-center gap-1.5 text-xs mt-auto ${overdue ? "text-rose-600 font-semibold" : "text-slate-500"}`}>
         <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
