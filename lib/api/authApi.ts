@@ -1,4 +1,5 @@
-import { apiSlice } from "./apiSlice";
+import { apiSlice, executeTokenRefresh } from "./apiSlice";
+import type { AppDispatch } from "../store";
 
 // ── Types matching FastAPI user_schema.py ──────────────────────────
 export interface LoginRequest {
@@ -100,15 +101,22 @@ export const authApi = apiSlice.injectEndpoints({
 
     /**
      * Refresh access token.
-     * No body is sent — the browser sends the HttpOnly refresh_token
-     * cookie automatically due to credentials: "include" on the baseQuery.
-     * The backend (POST /auth/refresh) reads the cookie directly.
+     * Delegates to the centralized executeTokenRefresh function to ensure
+     * strict single-flight mutex protection and proactive timer synchronization.
      */
     refreshToken: builder.mutation<RefreshResponse, void>({
-      query: () => ({
-        url: "/auth/refresh",
-        method: "POST",
-      }),
+      queryFn: async (_arg, api) => {
+        const token = await executeTokenRefresh(api.dispatch as AppDispatch);
+        if (token) {
+          return { data: { access_token: token, token_type: "bearer" } };
+        }
+        return {
+          error: {
+            status: 401,
+            data: { detail: "Failed to refresh access token" },
+          },
+        };
+      },
     }),
 
     /**

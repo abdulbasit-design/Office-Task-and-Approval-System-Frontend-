@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { clearAccessToken } from "@/lib/slices/authSlice";
 import { useLogoutMutation, useGetMeQuery } from "@/lib/api/authApi";
-import { apiSlice } from "@/lib/api/apiSlice";
+import { apiSlice, clearProactiveTimer } from "@/lib/api/apiSlice";
 import NotificationBadge from "@/components/notifications/NotificationBadge";
 
 // ── Page title map ────────────────────────────────────────────────────────
@@ -121,6 +121,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
     } catch {
       // Even if the server call fails, clear the local access token
     } finally {
+      clearProactiveTimer();
       dispatch(clearAccessToken());
       dispatch(apiSlice.util.resetApiState());
       router.push("/login");
