@@ -241,18 +241,8 @@ textarea::placeholder {
   .btn:active:not(:disabled) { transform: translateY(1px); }
   .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
-  .btn-primary { background: var(--note); color: var(--on-note); position: relative; overflow: hidden; isolation: isolate; }
+  .btn-primary { background: var(--note); color: var(--on-note); }
   .btn-primary:hover:not(:disabled) { background: var(--note-deep); }
-  /* Foil sheen: a band of light crosses the fill on hover */
-  .btn-primary::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(105deg, transparent 30%, color-mix(in oklab, var(--on-note) 22%, transparent) 50%, transparent 70%);
-    transform: translateX(-120%);
-    pointer-events: none;
-  }
 
   .btn-secondary {
     background: var(--paper-raised);
@@ -408,9 +398,6 @@ textarea::placeholder {
   .dialog-backdrop { animation: fade 220ms ease-out both; }
   .dialog-panel { animation: settle 360ms var(--ease-out-expo) both; }
   .menu-in { animation: unfold 200ms var(--ease-out-expo) both; transform-origin: top right; }
-
-  .btn-primary::after { transition: transform 750ms var(--ease-out-expo); }
-  .btn-primary:hover:not(:disabled)::after { transform: translateX(120%); }
 
   /* Rows nudge toward their target on hover */
   .nudge { transition: transform 220ms var(--ease-out-expo); }
