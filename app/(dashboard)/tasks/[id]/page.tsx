@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowUUpLeft, CaretLeft, CheckCircle, PaperPlaneTilt, PencilSimple, SealCheck, WarningCircle } from "@phosphor-icons/react";
@@ -17,6 +17,7 @@ import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
 import { StatusBadge, PriorityBadge } from "@/components/tasks/TaskStatusBadge";
 import TaskActivity from "@/components/tasks/TaskActivity";
 import TaskForm from "@/components/tasks/TaskForm";
+import CloseOnEscape from "@/components/ui/CloseOnEscape";
 import Seal from "@/components/ui/Seal";
 import Serial from "@/components/ui/Serial";
 import { dueLabel, formatDate, formatDateTime } from "@/lib/format";
@@ -49,13 +50,9 @@ function Spinner() {
 
 // ── Dialog shell ─────────────────────────────────────────────────────────────
 function Dialog({ id, title, body, onClose, children }: { id: string; title: string; body: string; onClose: () => void; children: React.ReactNode }) {
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4" role="dialog" aria-modal="true" aria-labelledby={id}>
+      <CloseOnEscape onClose={onClose} />
       <div className="panel w-full max-w-md p-6 shadow-[0_24px_60px_-20px_rgb(var(--shadow-color)/0.5)]">
         <h3 id={id} className="font-display text-[24px] leading-tight text-ink">{title}</h3>
         <p className="mt-1 text-[14px] text-ink-2">{body}</p>

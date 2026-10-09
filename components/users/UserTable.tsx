@@ -8,6 +8,7 @@ import { useDeleteUserMutation } from "@/lib/api/userApi";
 import type { DepartmentResponse } from "@/lib/api/departmentApi";
 import Rosette from "@/components/ui/Rosette";
 import { formatDate } from "@/lib/format";
+import CloseOnEscape from "@/components/ui/CloseOnEscape";
 
 interface UserTableProps {
   users: UserResponse[];
@@ -261,6 +262,7 @@ export default function UserTable({
             aria-labelledby="delete-user-title"
             className="panel w-full max-w-md space-y-4 p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
           >
+            <CloseOnEscape onClose={() => setUserToDelete(null)} />
             <div>
               <h3 id="delete-user-title" className="font-display text-[22px] leading-tight text-ink">Delete user account</h3>
               <p className="mt-1 text-[13px] text-ink-3">This cannot be undone.</p>

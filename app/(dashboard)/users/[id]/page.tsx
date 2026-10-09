@@ -14,6 +14,7 @@ import { useGetMeQuery } from "@/lib/api/authApi";
 import UserForm from "@/components/users/UserForm";
 import { Avatar, RoleBadge, StatusBadge } from "@/components/users/UserTable";
 import { formatDateTime } from "@/lib/format";
+import CloseOnEscape from "@/components/ui/CloseOnEscape";
 
 export default function UserDetailPage() {
   const params = useParams();
@@ -212,6 +213,7 @@ export default function UserDetailPage() {
             aria-labelledby="delete-account-title"
             className="panel w-full max-w-md space-y-4 p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
           >
+            <CloseOnEscape onClose={() => setShowDeleteModal(false)} />
             <div>
               <h3 id="delete-account-title" className="font-display text-[22px] leading-tight text-ink">Delete user account</h3>
               <p className="mt-1 text-[13px] text-ink-3">This cannot be undone.</p>

@@ -9,6 +9,7 @@ import { useGetMeQuery } from "@/lib/api/authApi";
 import DepartmentTable from "@/components/departments/DepartmentTable";
 import DepartmentForm from "@/components/departments/DepartmentForm";
 import type { DepartmentResponse } from "@/lib/api/departmentApi";
+import CloseOnEscape from "@/components/ui/CloseOnEscape";
 
 export default function DepartmentsPage() {
   const { data: currentUser } = useGetMeQuery();
@@ -168,6 +169,7 @@ export default function DepartmentsPage() {
             aria-labelledby="department-dialog-title"
             className="panel w-full max-w-lg p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
           >
+            <CloseOnEscape onClose={handleModalClose} />
             <div className="mb-5 flex items-center justify-between gap-4 border-b border-line pb-3">
               <h2 id="department-dialog-title" className="font-display text-[22px] leading-tight text-ink">
                 {selectedDept ? "Edit department" : "New department"}

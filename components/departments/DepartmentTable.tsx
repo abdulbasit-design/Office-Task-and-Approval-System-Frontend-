@@ -6,6 +6,7 @@ import type { DepartmentResponse } from "@/lib/api/departmentApi";
 import { useDeleteDepartmentMutation } from "@/lib/api/departmentApi";
 import Rosette from "@/components/ui/Rosette";
 import { formatDate } from "@/lib/format";
+import CloseOnEscape from "@/components/ui/CloseOnEscape";
 
 interface DepartmentTableProps {
   departments: DepartmentResponse[];
@@ -168,6 +169,7 @@ export default function DepartmentTable({
             aria-labelledby="delete-department-title"
             className="panel w-full max-w-md space-y-4 p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
           >
+            <CloseOnEscape onClose={() => setDeptToDelete(null)} />
             <div>
               <h3 id="delete-department-title" className="font-display text-[22px] leading-tight text-ink">Delete department</h3>
               <p className="mt-1 text-[13px] text-ink-3">This cannot be undone.</p>

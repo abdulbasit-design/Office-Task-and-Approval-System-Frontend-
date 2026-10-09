@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { CircleNotch, Eye, EyeSlash, WarningCircle, X } from "@phosphor-icons/react";
 import { useAdminResetPasswordMutation, PasswordResetRequestItem } from "@/lib/api/authApi";
+import CloseOnEscape from "@/components/ui/CloseOnEscape";
 
 interface AdminResetPasswordModalProps {
   request: PasswordResetRequestItem;
@@ -102,6 +103,7 @@ export default function AdminResetPasswordModal({
       aria-modal="true"
       aria-labelledby="modal-title"
     >
+      <CloseOnEscape onClose={handleClose} />
       <div className="panel relative my-auto w-full max-w-md p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)] sm:p-7">
         <div className="flex items-start justify-between gap-4">
           <div>
