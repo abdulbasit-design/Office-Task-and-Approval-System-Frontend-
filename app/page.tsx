@@ -232,8 +232,17 @@ export default function LandingPage() {
             <p className="mt-4 max-w-[60ch] text-[17px] leading-relaxed text-ink-2">
               The people who do the work, the people who sign it off, and the people who run the organization each see what is theirs.
             </p>
-            <div className="mt-10 overflow-x-auto">
-              <table className="w-full min-w-[560px] border-collapse text-left">
+            {/* Phones get the same matrix read row by row */}
+            <ul className="mt-8 divide-y divide-line border-y border-line-strong sm:hidden" role="list">
+              {CAPABILITIES.map((c) => (
+                <li key={c.label} className="reveal py-3.5">
+                  <p className="text-ink">{c.label}</p>
+                  <p className="engraved mt-1 text-[12px] text-note-ink">{c.roles.join("  ·  ")}</p>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-10 hidden sm:block">
+              <table className="w-full border-collapse text-left">
                 <thead>
                   <tr className="border-b border-line-strong">
                     <th scope="col" className="caps py-3 pr-4 text-ink-3 font-semibold">Capability</th>
