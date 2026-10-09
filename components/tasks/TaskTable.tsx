@@ -107,7 +107,7 @@ export default function TaskTable({ tasks, isLoading = false, filtered = false }
                     <td className="whitespace-nowrap px-4 py-4 align-top">
                       <time dateTime={task.deadline} className="block text-ink">{formatDate(task.deadline)}</time>
                       {!settled && (
-                        <span className={`text-[12px] ${due.overdue ? "text-serial" : due.soon ? "text-seal-ink" : "text-ink-3"}`}>
+                        <span className={`text-[12px] ${due.overdue ? "text-serial" : due.soon ? "font-medium text-ink-2" : "text-ink-3"}`}>
                           {due.text}
                         </span>
                       )}

@@ -50,7 +50,7 @@ function QueueRow({ task, perspective, index }: { task: TaskResponse; perspectiv
           )}
         </div>
         <div className="flex flex-col items-end gap-1.5 text-right">
-          <span className={`tabular whitespace-nowrap text-[13px] font-medium ${due.overdue ? "text-serial" : due.soon ? "text-seal-ink" : "text-ink-2"}`}>
+          <span className={`tabular whitespace-nowrap text-[13px] font-medium ${due.overdue ? "text-serial" : due.soon ? "text-ink" : "text-ink-2"}`}>
             {due.text}
           </span>
           <span className="flex items-center gap-3">

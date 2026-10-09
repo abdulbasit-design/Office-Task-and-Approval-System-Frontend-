@@ -361,7 +361,7 @@ export default function TaskDetailPage() {
                 <Meta term="Deadline">
                   <time dateTime={task.deadline} className="tabular">{formatDate(task.deadline)}</time>
                   {task.status !== "APPROVED" && (
-                    <span className={`block text-[13px] ${due.overdue ? "text-serial" : due.soon ? "text-seal-ink" : "text-ink-3"}`}>
+                    <span className={`block text-[13px] ${due.overdue ? "text-serial" : due.soon ? "font-medium text-ink-2" : "text-ink-3"}`}>
                       {due.text}
                     </span>
                   )}
