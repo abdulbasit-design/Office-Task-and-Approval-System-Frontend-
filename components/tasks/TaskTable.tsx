@@ -2,177 +2,118 @@
 
 import React from "react";
 import Link from "next/link";
+import { CaretRight } from "@phosphor-icons/react";
 import type { TaskResponse } from "@/lib/api/taskApi";
+import { useGetMeQuery } from "@/lib/api/authApi";
 import { StatusBadge, PriorityBadge } from "./TaskStatusBadge";
+import Rosette from "@/components/ui/Rosette";
+import Serial from "@/components/ui/Serial";
+import { dueLabel, formatDate } from "@/lib/format";
 
-// ── Helpers ───────────────────────────────────────────────────────────────
-function formatDeadline(iso: string): string {
-  try {
-    return new Date(iso).toLocaleDateString("en-US", {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-    });
-  } catch {
-    return iso;
-  }
-}
-
-function isOverdue(deadline: string, status: TaskResponse["status"]): boolean {
-  if (status === "APPROVED") return false;
-  return new Date(deadline) < new Date();
-}
-
-// ── Props ─────────────────────────────────────────────────────────────────
 interface TaskTableProps {
   tasks: TaskResponse[];
   isLoading?: boolean;
+  /** Whether filters are narrowing the list (changes the empty message) */
+  filtered?: boolean;
 }
 
-// ── Skeleton row ─────────────────────────────────────────────────────────
-function SkeletonRow() {
+function SkeletonRows() {
   return (
-    <tr className="border-b border-slate-100 animate-pulse">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <td key={i} className="px-5 py-4">
-          <div className="h-3.5 bg-slate-200 rounded w-3/4" />
-        </td>
+    <>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <tr key={i} className="animate-pulse">
+          <td className="px-5 py-4"><div className="h-4 w-20 bg-paper-sunk" /></td>
+          <td className="px-4 py-4"><div className="h-4 w-3/4 bg-paper-sunk" /><div className="mt-2 h-3 w-1/2 bg-paper-sunk" /></td>
+          <td className="hidden px-4 py-4 md:table-cell"><div className="h-4 w-24 bg-paper-sunk" /></td>
+          <td className="hidden px-4 py-4 lg:table-cell"><div className="h-6 w-20 bg-paper-sunk" /></td>
+          <td className="hidden px-4 py-4 lg:table-cell"><div className="h-4 w-16 bg-paper-sunk" /></td>
+          <td className="px-4 py-4"><div className="h-4 w-24 bg-paper-sunk" /></td>
+          <td className="px-4 py-4" />
+        </tr>
       ))}
-    </tr>
+    </>
   );
 }
 
-// ── Empty state ───────────────────────────────────────────────────────────
-function EmptyState() {
-  return (
-    <tr>
-      <td colSpan={5}>
-        <div className="flex flex-col items-center justify-center py-16 gap-3 text-slate-400">
-          <svg className="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-          <div className="text-center">
-            <p className="text-sm font-semibold text-slate-600">No tasks found</p>
-            <p className="text-xs text-slate-400 mt-1">Tasks assigned to or created by you will appear here.</p>
-          </div>
-        </div>
-      </td>
-    </tr>
-  );
-}
+export default function TaskTable({ tasks, isLoading = false, filtered = false }: TaskTableProps) {
+  const { data: me } = useGetMeQuery();
+  const asAssignee = me?.role === "employee";
 
-// ── TaskTable ─────────────────────────────────────────────────────────────
-export default function TaskTable({ tasks, isLoading = false }: TaskTableProps) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] overflow-hidden">
-      {/* Scrollable table */}
+    <div className="panel overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs sm:text-sm" role="table" aria-label="Tasks list">
-          {/* Header */}
-          <thead className="bg-slate-50/70 border-b border-slate-100 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-            <tr>
-              <th scope="col" className="px-5 py-3.5">Task</th>
-              <th scope="col" className="px-4 py-3.5 hidden sm:table-cell">Assigned To</th>
-              <th scope="col" className="px-4 py-3.5 hidden md:table-cell">Status</th>
-              <th scope="col" className="px-4 py-3.5 hidden lg:table-cell">Priority</th>
-              <th scope="col" className="px-4 py-3.5 hidden xl:table-cell">Deadline</th>
-              <th scope="col" className="px-5 py-3.5 text-right">View</th>
+        <table className="w-full text-left text-[14px] max-sm:block sm:min-w-[640px]">
+          <thead className="border-b border-line bg-paper-sunk max-sm:hidden">
+            <tr className="caps text-ink-3">
+              <th scope="col" className="w-36 px-5 py-3 font-semibold">Serial</th>
+              <th scope="col" className="px-4 py-3 font-semibold">Task</th>
+              <th scope="col" className="hidden px-4 py-3 font-semibold md:table-cell">{asAssignee ? "From" : "Assigned to"}</th>
+              <th scope="col" className="hidden px-4 py-3 font-semibold lg:table-cell">Status</th>
+              <th scope="col" className="hidden px-4 py-3 font-semibold lg:table-cell">Priority</th>
+              <th scope="col" className="px-4 py-3 font-semibold">Deadline</th>
+              <th scope="col" className="w-10 px-4 py-3"><span className="sr-only">Open</span></th>
             </tr>
           </thead>
-
-          {/* Body */}
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-line max-sm:block">
             {isLoading ? (
-              <>
-                <SkeletonRow />
-                <SkeletonRow />
-                <SkeletonRow />
-                <SkeletonRow />
-                <SkeletonRow />
-              </>
+              <SkeletonRows />
             ) : tasks.length === 0 ? (
-              <EmptyState />
+              <tr>
+                <td colSpan={7}>
+                  <div className="flex items-center justify-center gap-5 px-6 py-16">
+                    <Rosette seed={77} variant="mark" className="h-14 w-14 shrink-0 text-line-strong" />
+                    <div>
+                      <p className="font-semibold text-ink">{filtered ? "No tasks match these filters." : "No tasks on record yet."}</p>
+                      <p className="mt-1 text-ink-3">
+                        {filtered
+                          ? "Clear the filters or try a different search."
+                          : "Tasks assigned to you or created by you will appear here."}
+                      </p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
             ) : (
-              tasks.map((task) => {
-                const overdue = isOverdue(task.deadline, task.status);
-
+              tasks.map((task, i) => {
+                const due = dueLabel(task.deadline);
+                const settled = task.status === "APPROVED";
                 return (
-                  <tr
-                    key={task.id}
-                    className="hover:bg-slate-50/60 transition-colors group"
-                  >
-                    {/* Title + description */}
-                    <td className="px-5 py-4 max-w-xs">
-                      <div className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1 text-sm">
-                        {task.title}
-                      </div>
-                      {task.description && (
-                        <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">
-                          {task.description}
-                        </p>
-                      )}
-                      {/* Mobile: show assignee + badges inline */}
-                      <div className="flex items-center gap-2 mt-1.5 sm:hidden flex-wrap">
-                        <span className="text-[11px] text-slate-600 font-medium">
-                          {task.assigned_to_name || `User #${task.assigned_to}`}
-                        </span>
-                        <StatusBadge status={task.status} />
-                        <PriorityBadge priority={task.priority} />
-                        {overdue && (
-                          <span className="text-[10px] font-semibold text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">
-                            Overdue
-                          </span>
-                        )}
-                      </div>
+                  <tr key={task.id} className="rise group relative transition-colors hover:bg-paper-sunk max-sm:grid max-sm:grid-cols-[1fr_auto] max-sm:gap-x-4 max-sm:gap-y-1.5 max-sm:px-4 max-sm:py-3.5" style={{ "--i": i } as React.CSSProperties}>
+                    <td className="px-5 py-4 align-top max-sm:col-start-1 max-sm:row-start-1 max-sm:p-0">
+                      <Serial id={task.id} />
                     </td>
-
-                    {/* Assigned To */}
-                    <td className="px-4 py-4 whitespace-nowrap hidden sm:table-cell">
-                      <div className="font-medium text-slate-800 text-xs">
-                        {task.assigned_to_name || `User #${task.assigned_to}`}
-                      </div>
-                      {task.department_name && (
-                        <span className="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded font-medium border border-blue-100 mt-0.5 inline-block">
-                          {task.department_name}
-                        </span>
-                      )}
-                    </td>
-
-                    {/* Status */}
-                    <td className="px-4 py-4 whitespace-nowrap hidden sm:table-cell">
-                      <StatusBadge status={task.status} />
-                    </td>
-
-                    {/* Priority */}
-                    <td className="px-4 py-4 whitespace-nowrap hidden md:table-cell">
-                      <PriorityBadge priority={task.priority} />
-                    </td>
-
-                    {/* Deadline */}
-                    <td className="px-4 py-4 whitespace-nowrap hidden lg:table-cell">
-                      <div className={`inline-flex items-center gap-1.5 text-xs ${overdue ? "text-rose-600 font-semibold" : "text-slate-600"}`}>
-                        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        {formatDeadline(task.deadline)}
-                        {overdue && <span className="text-[10px] text-rose-500 font-bold ml-1">Overdue</span>}
-                      </div>
-                    </td>
-
-                    {/* View link */}
-                    <td className="px-5 py-4 whitespace-nowrap text-right">
+                    <td className="max-w-md px-4 py-4 align-top max-sm:col-span-2 max-sm:row-start-2 max-sm:max-w-none max-sm:p-0">
                       <Link
                         href={`/tasks/${task.id}`}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors"
-                        aria-label={`View task: ${task.title}`}
+                        className="font-semibold text-ink after:absolute after:inset-0 group-hover:text-note-ink"
                       >
-                        View
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        {task.title}
                       </Link>
+                      {task.description && <p className="mt-0.5 line-clamp-1 text-[13px] text-ink-3">{task.description}</p>}
+                      <div className="mt-2 flex flex-wrap items-center gap-3 lg:hidden">
+                        <StatusBadge status={task.status} />
+                        <PriorityBadge priority={task.priority} />
+                      </div>
+                    </td>
+                    <td className="hidden whitespace-nowrap px-4 py-4 align-top text-ink-2 md:table-cell">
+                      {(asAssignee ? task.created_by_name : task.assigned_to_name) ?? "Unknown"}
+                    </td>
+                    <td className="hidden px-4 py-4 align-top lg:table-cell">
+                      <StatusBadge status={task.status} />
+                    </td>
+                    <td className="hidden px-4 py-4 align-top lg:table-cell">
+                      <PriorityBadge priority={task.priority} />
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-4 align-top max-sm:col-start-2 max-sm:row-start-1 max-sm:flex max-sm:items-baseline max-sm:gap-2 max-sm:p-0 max-sm:text-[13px]">
+                      <time dateTime={task.deadline} className={`block text-ink ${settled ? "" : "max-sm:hidden"}`}>{formatDate(task.deadline)}</time>
+                      {!settled && (
+                        <span className={`text-[12px] ${due.overdue ? "text-serial" : due.soon ? "font-medium text-ink-2" : "text-ink-3"}`}>
+                          {due.text}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-4 align-top text-ink-3 group-hover:text-note-ink max-sm:hidden">
+                      <CaretRight size={16} aria-hidden="true" className="nudge" />
                     </td>
                   </tr>
                 );

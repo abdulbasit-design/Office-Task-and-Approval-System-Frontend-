@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { usePathname } from "next/navigation";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 
@@ -25,9 +26,10 @@ import Header from "./Header";
  */
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden bg-paper">
       {/* ── Sidebar ──────────────────────────────────────────────── */}
       <Sidebar
         mobileOpen={mobileSidebarOpen}
@@ -46,7 +48,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           role="main"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-10">
-            {children}
+            {/* Re-keyed per route so each page settles in */}
+            <div key={pathname} className="page-enter">{children}</div>
           </div>
         </main>
       </div>

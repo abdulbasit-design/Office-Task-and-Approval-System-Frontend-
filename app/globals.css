@@ -1,26 +1,507 @@
 @import "tailwindcss";
 
+/* Theme: html[data-theme] pins light or dark; absent, the OS decides.
+   light-dark() keeps every token to one declaration per pair. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light dark;
+
+  /* Charcoal + Bronze: neutral security paper, charcoal intaglio ink */
+  --paper: light-dark(#f3f3f2, #111214);
+  --paper-raised: light-dark(#fbfbfa, #18191c);
+  --paper-sunk: light-dark(#e8e8e6, #0b0c0d);
+  --ink: light-dark(#17191c, #e8e8e6);
+  --ink-2: light-dark(#44474d, #abadb2);
+  --ink-3: light-dark(#62666d, #878a91);
+  --line: light-dark(#d6d6d3, #2a2c30);
+  --line-strong: light-dark(#a3a5a8, #484b51);
+
+  /* Brand ink ("note"): charcoal fills, links, active states; inverts in dark */
+  --note: light-dark(#1f2328, #e8e8e6);
+  --note-deep: light-dark(#0b0d10, #f7f7f6);
+  --note-ink: light-dark(#1f2328, #e8e8e6);
+  --note-tint: light-dark(#e2e2df, #26282c);
+  --on-note: light-dark(#fafaf9, #141518);
+
+  /* Approved and success, status only */
+  --ok: light-dark(#2f6b4f, #7fc4a0);
+  --ok-tint: light-dark(#e1ece5, #15291f);
+
+  /* Bronze foil, reserved for seals and the awaiting-countersign state */
+  --seal: light-dark(#a47e3b, #c9a35a);
+  --seal-ink: light-dark(#7a5a1f, #d8b56e);
+  --seal-tint: light-dark(#f1e8d6, #2b2416);
+
+  /* Numbering red: serials, rejection, destructive */
+  --serial: light-dark(#b42318, #f07b6e);
+  --serial-fill: light-dark(#b42318, #c4382c);
+  --serial-tint: light-dark(#f7e4e1, #351612);
+
+  --shadow-color: light-dark(23 25 28, 0 0 0);
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+/* Desktop sidebar folded to a rail: html[data-sidebar="collapsed"], set before paint.
+   Scoped to [data-rail] so the mobile drawer and other brand marks are unaffected.
+   folded:    the rail's footprint in the layout (stays narrow while peeking)
+   collapsed: the rail's look, unless the folded rail is peeking open on hover/focus */
+@custom-variant folded (&:where(:root[data-sidebar="collapsed"] [data-rail]));
+@custom-variant collapsed (&:where(:root[data-sidebar="collapsed"] [data-rail]:not([data-peek]), :root[data-sidebar="collapsed"] [data-rail]:not([data-peek]) *));
+
+/* Theme switch: the incoming theme washes across the page along the hatching
+   angle with a feathered edge, like ink drawn over paper (see ThemeToggle). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  -webkit-mask: linear-gradient(118deg, #000 42%, transparent 58%) 100% 0 / 300% 100% no-repeat;
+  mask: linear-gradient(118deg, #000 42%, transparent 58%) 100% 0 / 300% 100% no-repeat;
+  animation: theme-wash 760ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes theme-wash {
+  from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+  to { -webkit-mask-position: 0 0; mask-position: 0 0; }
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-sunk: var(--paper-sunk);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-note: var(--note);
+  --color-note-deep: var(--note-deep);
+  --color-note-ink: var(--note-ink);
+  --color-note-tint: var(--note-tint);
+  --color-on-note: var(--on-note);
+  --color-ok: var(--ok);
+  --color-ok-tint: var(--ok-tint);
+  --color-seal: var(--seal);
+  --color-seal-ink: var(--seal-ink);
+  --color-seal-tint: var(--seal-tint);
+  --color-serial: var(--serial);
+  --color-serial-fill: var(--serial-fill);
+  --color-serial-tint: var(--serial-tint);
+
+  --font-sans: var(--font-archivo);
+  --font-display: var(--font-bodoni);
+  --font-mono: var(--font-azeret);
+
+  /* One corner language: square engraved frames. Seals and avatars are circles. */
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base ─────────────────────────────────────────────────────────── */
+html {
+  background: var(--paper);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  font-feature-settings: "kern", "liga";
+  caret-color: var(--note-ink);
+}
+
+::selection {
+  background: var(--seal-tint);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--note-ink);
+  outline-offset: 2px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+a {
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+table,
+time,
+.tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Tailwind v4 resets buttons to the default cursor; every live control gets the hand */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+select:not(:disabled),
+summary,
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--ink-3);
+  opacity: 1;
+}
+
+/* ── World components ─────────────────────────────────────────────── */
+@layer components {
+  /* Bodoni Moda's large optical master mis-spaces v and y; the text master
+     spaces correctly and its sturdier hairlines read as engraving. */
+  .font-display,
+  .engraved {
+    font-variation-settings: "opsz" 11;
+  }
+
+  /* Engraved display voice, set in caps */
+  .engraved {
+    font-family: var(--font-display);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Small-cap labels for table heads and field names (never above headings) */
+  .caps {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-stretch: 88%;
+  }
+
+  /* A banknote frame: hairline, gap, hairline */
+  .frame {
+    background: var(--paper-raised);
+    border: 1px solid var(--line-strong);
+    box-shadow:
+      inset 0 0 0 3px var(--paper-raised),
+      inset 0 0 0 4px var(--line),
+      0 10px 28px -18px rgb(var(--shadow-color) / 0.35);
+  }
+
+  .panel {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Fine-line intaglio ground for brand surfaces */
+  .fine-lines {
+    background-image: repeating-linear-gradient(
+      118deg,
+      color-mix(in oklab, var(--note-ink) 9%, transparent) 0 1px,
+      transparent 1px 6px
+    );
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    transition:
+      background-color 160ms var(--ease-out-expo),
+      border-color 160ms var(--ease-out-expo),
+      color 160ms var(--ease-out-expo),
+      transform 120ms var(--ease-out-expo);
+  }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .btn-primary { background: var(--note); color: var(--on-note); }
+  .btn-primary:hover:not(:disabled) { background: var(--note-deep); }
+
+  /* Segmented controls: one ink plate glides to the active option and stretches to its width */
+  .segment-plate {
+    transition:
+      transform 420ms var(--ease-out-expo),
+      width 420ms var(--ease-out-expo),
+      height 420ms var(--ease-out-expo),
+      opacity 160ms ease-out;
+  }
+
+  .btn-secondary {
+    background: var(--paper-raised);
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+  .btn-secondary:hover:not(:disabled) { background: var(--paper-sunk); }
+
+  .btn-ghost { color: var(--ink-2); }
+  .btn-ghost:hover:not(:disabled) { background: var(--paper-sunk); color: var(--ink); }
+
+  /* Destructive stays outline until hovered or focused */
+  .btn-danger {
+    color: var(--serial);
+    border-color: color-mix(in oklab, var(--serial) 55%, transparent);
+    background: transparent;
+  }
+  .btn-danger:hover:not(:disabled),
+  .btn-danger:focus-visible { background: var(--serial-fill); border-color: var(--serial-fill); color: #fff; }
+
+  .field-label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .input {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line-strong);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-size: 15px;
+    transition: border-color 160ms var(--ease-out-expo), box-shadow 160ms var(--ease-out-expo);
+  }
+  .input:hover:not(:disabled) { border-color: var(--ink-3); }
+  .input:focus {
+    outline: none;
+    border-color: var(--note-ink);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--note-ink) 22%, transparent);
+  }
+  .input[aria-invalid="true"] { border-color: var(--serial); }
+  .input:disabled { background-color: var(--paper-sunk); color: var(--ink-3); cursor: not-allowed; }
+
+  /* Selects: a quiet engraved caret everywhere. Where the browser supports a
+     customizable select, the option list is drawn as one of our menus too:
+     same sheet, border and shadow, a flipping caret, ink-marked selection. */
+  select.input {
+    --caret: var(--ink-3);
+    --caret-image:
+      linear-gradient(45deg, transparent 50%, var(--caret) 50%),
+      linear-gradient(135deg, var(--caret) 50%, transparent 50%);
+    appearance: none;
+    padding-right: 2.25rem;
+    background-image: var(--caret-image);
+    background-position: calc(100% - 17px) calc(50% + 1px), calc(100% - 12px) calc(50% + 1px);
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+  }
+  @supports (appearance: base-select) {
+    select.input,
+    select.input::picker(select) { appearance: base-select; }
+    select.input { padding-right: 0.75rem; background-image: none; gap: 0.5rem; }
+    /* Same thin caret as the fallback, so every browser draws one shape */
+    select.input::picker-icon {
+      content: "";
+      width: 10px;
+      height: 6px;
+      align-self: center;
+      background-image: var(--caret-image);
+      background-size: 5px 5px;
+      background-position: 0 0, 5px 0;
+      background-repeat: no-repeat;
+    }
+    select.input:open { --caret: var(--ink); border-color: var(--note-ink); }
+    select.input:open::picker-icon { rotate: 180deg; }
+    select.input::picker(select) {
+      margin-block: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--paper-raised);
+      color: var(--ink);
+      box-shadow: 0 16px 40px -16px rgb(var(--shadow-color) / 0.4);
+    }
+    select.input option {
+      padding: 0.5rem 0.625rem;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--ink-2);
+      cursor: pointer;
+    }
+    select.input option:hover,
+    select.input option:focus-visible { background: var(--paper-sunk); color: var(--ink); outline: none; }
+    select.input option:checked { color: var(--ink); font-weight: 600; }
+    select.input option::checkmark { color: var(--note-ink); }
+  }
+
+  /* Rail labels fold back toward the spine like a note creasing, then return */
+  .fold-label {
+    transform-origin: left center;
+    transition:
+      opacity 260ms var(--ease-out-expo) 90ms,
+      transform 460ms var(--ease-out-expo) 60ms;
+  }
+  :root[data-sidebar="collapsed"] [data-rail]:not([data-peek]) .fold-label {
+    opacity: 0;
+    transform: perspective(320px) rotateY(-70deg) translateX(-4px);
+    transition-delay: 0ms;
+  }
+  .fold-rule {
+    opacity: 0;
+    transition: opacity 260ms var(--ease-out-expo);
+  }
+  :root[data-sidebar="collapsed"] [data-rail]:not([data-peek]) .fold-rule {
+    opacity: 1;
+    transition-delay: 160ms;
+  }
+
+  .field-error { margin-top: 0.375rem; font-size: 13px; color: var(--serial); }
+  .field-hint { margin-top: 0.375rem; font-size: 13px; color: var(--ink-3); }
+}
+
+/* ── Motion ───────────────────────────────────────────────────────── */
+@keyframes rosette-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes seal-press {
+  0% { transform: scale(1.12); opacity: 0; }
+  60% { opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes refresh-turn {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes icon-turn {
+  from { transform: rotate(-90deg) scale(0.6); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes lathe {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes stamp {
+  0% { opacity: 0; transform: scale(1.35) rotate(-6deg); }
+  55% { opacity: 1; transform: scale(0.96) rotate(1deg); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.15); opacity: 1; }
+  100% { transform: none; }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+}
+
+@keyframes settle {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+}
+
+@keyframes unfold {
+  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+}
+
+@keyframes draw-x {
+  from { transform: scaleX(0); }
+}
+
+/* Reduced motion: transitions resolve at once and skeletons hold still.
+   Spinners keep turning; they report progress rather than decorate. */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { transition-duration: 0s !important; transition-delay: 0s !important; }
+  .animate-pulse { animation: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rosette-draw path {
+    stroke-dasharray: 1;
+    animation: rosette-draw 2.4s var(--ease-out-expo) both;
+    animation-delay: calc(var(--i, 0) * 90ms);
+  }
+  .seal-press { animation: seal-press 520ms var(--ease-out-expo) both; }
+  .rise { animation: rise 420ms var(--ease-out-expo) both; animation-delay: calc(var(--i, 0) * 40ms); }
+  .icon-turn { animation: icon-turn 480ms var(--ease-out-expo) both; }
+  .refresh-turn { animation: refresh-turn 900ms cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+
+  /* Select lists unfold like the other menus; the caret turns as they open */
+  @supports (appearance: base-select) {
+    select.input::picker-icon { transition: rotate 220ms var(--ease-out-expo); }
+    select.input::picker(select) {
+      transition:
+        opacity 160ms ease-out,
+        translate 220ms var(--ease-out-expo),
+        overlay 220ms allow-discrete,
+        display 220ms allow-discrete;
+    }
+    select.input:not(:open)::picker(select) { opacity: 0; translate: 0 -4px; }
+    @starting-style {
+      select.input:open::picker(select) { opacity: 0; translate: 0 -4px; }
+    }
+  }
+
+  /* Each route's content settles in */
+  .page-enter { animation: rise 460ms var(--ease-out-expo) both; }
+
+  /* Large rosettes turn slowly, like the lathe that cuts them */
+  .lathe { animation: lathe 160s linear infinite; }
+  .lathe-hover { transition: transform 900ms var(--ease-out-expo); }
+  .group:hover .lathe-hover { transform: rotate(60deg); }
+
+  .stamp-in { animation: stamp 520ms var(--ease-out-expo) both; }
+  .pop-in { animation: pop 420ms var(--ease-out-expo) both; }
+
+  .dialog-backdrop { animation: fade 220ms ease-out both; }
+  .dialog-panel { animation: settle 360ms var(--ease-out-expo) both; }
+  .menu-in { animation: unfold 200ms var(--ease-out-expo) both; transform-origin: top right; }
+
+  /* Rows nudge toward their target on hover */
+  .nudge { transition: transform 220ms var(--ease-out-expo); }
+  .group:hover .nudge { transform: translateX(3px); }
+
+  /* Landing: sections reveal as they scroll in (where scroll timelines exist) */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+    .draw-line {
+      transform-origin: left;
+      animation: draw-x linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 40%;
+    }
+  }
 }

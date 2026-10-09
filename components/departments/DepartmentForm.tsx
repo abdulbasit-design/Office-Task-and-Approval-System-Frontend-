@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { CircleNotch, WarningCircle } from "@phosphor-icons/react";
 import type { DepartmentResponse, DepartmentCreate } from "@/lib/api/departmentApi";
 import {
   useCreateDepartmentMutation,
@@ -8,6 +9,7 @@ import {
 } from "@/lib/api/departmentApi";
 
 interface DepartmentFormProps {
+  /** Fields initialize from this once; remount (change `key`) to edit another department. */
   initialData?: DepartmentResponse | null;
   onSuccess?: (dept: DepartmentResponse) => void;
   onCancel?: () => void;
@@ -27,12 +29,6 @@ export default function DepartmentForm({
   const [name, setName] = useState(initialData?.name || "");
   const [description, setDescription] = useState(initialData?.description || "");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  useEffect(() => {
-    setName(initialData?.name || "");
-    setDescription(initialData?.description || "");
-    setErrorMsg(null);
-  }, [initialData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,25 +75,20 @@ export default function DepartmentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Error Banner */}
+    <form onSubmit={handleSubmit} className="space-y-5">
       {errorMsg && (
-        <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-2.5 text-xs text-rose-800 animate-in fade-in duration-150">
-          <svg className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
+        <div role="alert" className="flex items-start gap-3 rounded-sm border border-serial/50 bg-serial-tint p-3 text-[14px]">
+          <WarningCircle size={20} className="mt-0.5 shrink-0 text-serial" />
           <div>
-            <span className="font-semibold block">Error</span>
-            <span>{errorMsg}</span>
+            <p className="font-semibold text-ink">The department was not saved</p>
+            <p className="mt-0.5 text-ink-2">{errorMsg}</p>
           </div>
         </div>
       )}
 
-      {/* Department Name */}
       <div>
-        <label htmlFor="dept-name" className="block text-xs font-semibold text-slate-700 mb-1.5">
-          Department Name <span className="text-rose-500">*</span>
+        <label htmlFor="dept-name" className="field-label">
+          Department name<span className="text-serial" aria-hidden="true"> *</span>
         </label>
         <input
           id="dept-name"
@@ -107,58 +98,46 @@ export default function DepartmentForm({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Engineering, Marketing, Human Resources"
-          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          aria-describedby="dept-name-hint"
+          className="input"
         />
-        <div className="flex justify-between items-center mt-1 text-[11px] text-slate-400">
+        <p id="dept-name-hint" className="field-hint flex justify-between gap-4">
           <span>Between 1 and 100 characters. Must be unique.</span>
-          <span>{name.length}/100</span>
-        </div>
+          <span className="tabular">{name.length}/100</span>
+        </p>
       </div>
 
-      {/* Description */}
       <div>
-        <label htmlFor="dept-description" className="block text-xs font-semibold text-slate-700 mb-1.5">
-          Description <span className="text-slate-400 font-normal">(optional)</span>
+        <label htmlFor="dept-description" className="field-label">
+          Description <span className="font-normal text-ink-3">(optional)</span>
         </label>
         <textarea
           id="dept-description"
           rows={3}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Brief description of the department's role and responsibilities..."
-          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+          placeholder="What this department is responsible for"
+          className="input resize-none"
         />
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+      <div className="flex items-center justify-end gap-2 border-t border-line pt-4">
         {onCancel && (
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={isSubmitting}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-50"
-          >
+          <button type="button" onClick={onCancel} disabled={isSubmitting} className="btn btn-ghost">
             Cancel
           </button>
         )}
 
-        <button
-          type="submit"
-          id="save-department-btn"
-          disabled={isSubmitting}
-          className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-        >
+        <button type="submit" id="save-department-btn" disabled={isSubmitting} className="btn btn-primary">
           {isSubmitting ? (
             <>
-              <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-              <span>{isEditing ? "Updating..." : "Creating..."}</span>
+              <CircleNotch size={16} className="animate-spin" aria-hidden="true" />
+              {isEditing ? "Saving..." : "Creating..."}
             </>
+          ) : isEditing ? (
+            "Save changes"
           ) : (
-            <span>{isEditing ? "Save Changes" : "Create Department"}</span>
+            "Create department"
           )}
         </button>
       </div>

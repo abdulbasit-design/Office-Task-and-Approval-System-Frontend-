@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { LockKey, MagnifyingGlass, Plus, WarningCircle } from "@phosphor-icons/react";
+import RefreshButton from "@/components/ui/RefreshButton";
 import { useGetUsersQuery } from "@/lib/api/userApi";
 import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
 import { useGetMeQuery } from "@/lib/api/authApi";
@@ -11,11 +13,14 @@ import type { UserResponse } from "@/lib/api/userApi";
 type RoleFilter = "ALL" | UserResponse["role"];
 type StatusFilter = "ALL" | "ACTIVE" | "INACTIVE";
 
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
 export default function UsersPage() {
   const { data: currentUser } = useGetMeQuery();
   const {
     data: users = [],
     isLoading: isUsersLoading,
+    isFetching,
     isError: isUsersError,
     error: usersError,
     refetch,
@@ -72,23 +77,15 @@ export default function UsersPage() {
   // Handle 403 state
   if (isForbidden) {
     return (
-      <div className="max-w-2xl mx-auto py-12 px-4 text-center">
-        <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-              d="M12 15v2m0 0v2m0-2h2m-2 0H10m11-3.5a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <h2 className="text-xl font-bold text-slate-900 mb-2">Administrator Access Required</h2>
-        <p className="text-sm text-slate-600 mb-6 max-w-md mx-auto">
-          The user directory and account management features are restricted to system administrators.
-          Your current account role is <span className="font-semibold text-slate-800 capitalize">{currentUser?.role || "standard user"}</span>.
+      <div className="panel mx-auto mt-6 max-w-xl px-6 py-10 text-center">
+        <LockKey size={32} className="mx-auto text-ink-3" aria-hidden="true" />
+        <h2 className="mt-4 font-display text-[26px] leading-tight text-ink">Administrator access required</h2>
+        <p className="mx-auto mt-2 max-w-md text-[14px] text-ink-2">
+          The user directory and account management are restricted to administrators. Your current role is{" "}
+          <span className="font-semibold capitalize text-ink">{currentUser?.role || "standard user"}</span>.
         </p>
-        <Link
-          href="/dashboard"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-sm"
-        >
-          Return to Dashboard
+        <Link href="/dashboard" className="btn btn-secondary mt-6">
+          Return to dashboard
         </Link>
       </div>
     );
@@ -96,156 +93,92 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6">
-      {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900">User Management</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            {isUsersLoading
-              ? "Loading users..."
-              : `${totalCount} registered account${totalCount !== 1 ? "s" : ""}`}
-          </p>
-        </div>
+      {/* Summary and primary action */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-[15px] text-ink-2">
+          {isUsersLoading
+            ? "Loading users..."
+            : `${plural(totalCount, "account")}, ${activeCount} active: ${plural(adminCount, "admin")}, ${plural(managerCount, "manager")}, ${plural(employeeCount, "employee")}.`}
+        </p>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => refetch()}
-            className="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors text-xs font-semibold flex items-center gap-1.5"
-            title="Refresh user list"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            <span className="hidden sm:inline">Refresh</span>
-          </button>
-
-          <Link
-            href="/signup"
-            target="_blank"
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-sm transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Register User
+        <div className="flex items-center gap-2">
+          <RefreshButton onRefresh={refetch} fetching={isFetching} />
+          <Link href="/signup" target="_blank" className="btn btn-primary">
+            <Plus size={16} weight="bold" /> Register user
           </Link>
         </div>
       </div>
 
-      {/* ── Stats Overview ───────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
-          <p className="text-xs font-semibold text-slate-500">Total Users</p>
-          <p className="text-2xl font-bold text-slate-900 mt-1">{totalCount}</p>
-          <span className="text-[11px] text-emerald-600 font-medium">
-            {activeCount} active
-          </span>
+      {/* Search and filters */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]">
+        <div className="relative">
+          <MagnifyingGlass
+            size={16}
+            aria-hidden="true"
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-3"
+          />
+          <input
+            type="text"
+            aria-label="Search users"
+            placeholder="Search by name or email"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="input pl-9"
+          />
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
-          <p className="text-xs font-semibold text-slate-500">Administrators</p>
-          <p className="text-2xl font-bold text-purple-600 mt-1">{adminCount}</p>
-          <span className="text-[11px] text-slate-400">Full system access</span>
-        </div>
+        <select
+          aria-label="Filter by role"
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value as RoleFilter)}
+          className="input"
+        >
+          <option value="ALL">All roles</option>
+          <option value="admin">Administrators</option>
+          <option value="manager">Managers</option>
+          <option value="employee">Employees</option>
+        </select>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
-          <p className="text-xs font-semibold text-slate-500">Managers</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">{managerCount}</p>
-          <span className="text-[11px] text-slate-400">Task approvals</span>
-        </div>
+        <select
+          aria-label="Filter by status"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+          className="input"
+        >
+          <option value="ALL">All statuses</option>
+          <option value="ACTIVE">Active accounts</option>
+          <option value="INACTIVE">Inactive accounts</option>
+        </select>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
-          <p className="text-xs font-semibold text-slate-500">Employees</p>
-          <p className="text-2xl font-bold text-slate-700 mt-1">{employeeCount}</p>
-          <span className="text-[11px] text-slate-400">Task execution</span>
-        </div>
+        <select
+          aria-label="Filter by department"
+          value={deptFilter}
+          onChange={(e) => setDeptFilter(e.target.value)}
+          className="input"
+        >
+          <option value="ALL">All departments</option>
+          <option value="NONE">Unassigned</option>
+          {departments.map((dept) => (
+            <option key={dept.id} value={String(dept.id)}>
+              {dept.name}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {/* ── Search & Filter Bar ──────────────────────────────────────────── */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_1px_6px_rgba(0,0,0,0.02)] p-4 space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {/* Search */}
-          <div className="relative">
-            <svg className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search by name or email..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-slate-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Role Filter */}
-          <div>
-            <select
-              value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value as RoleFilter)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="ALL">All Roles</option>
-              <option value="admin">Administrators</option>
-              <option value="manager">Managers</option>
-              <option value="employee">Employees</option>
-            </select>
-          </div>
-
-          {/* Status Filter */}
-          <div>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="ALL">All Statuses</option>
-              <option value="ACTIVE">Active Accounts</option>
-              <option value="INACTIVE">Inactive Accounts</option>
-            </select>
-          </div>
-
-          {/* Department Filter */}
-          <div>
-            <select
-              value={deptFilter}
-              onChange={(e) => setDeptFilter(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="ALL">All Departments</option>
-              <option value="NONE">Unassigned</option>
-              {departments.map((dept) => (
-                <option key={dept.id} value={String(dept.id)}>
-                  {dept.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Generic Error Notice ─────────────────────────────────────────── */}
       {isUsersError && (
-        <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-center justify-between gap-3 text-rose-800 text-xs">
-          <div className="flex items-center gap-2">
-            <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            <span>Failed to load users from the server.</span>
+        <div role="alert" className="flex items-start gap-3 rounded-sm border border-serial/50 bg-serial-tint p-4 text-[14px]">
+          <WarningCircle size={20} className="mt-0.5 shrink-0 text-serial" />
+          <div className="flex-1">
+            <p className="font-semibold text-ink">Users could not be loaded</p>
+            <p className="mt-0.5 text-ink-2">Check that the API is running, then retry.</p>
           </div>
-          <button
-            onClick={() => refetch()}
-            className="font-bold underline hover:text-rose-900"
-          >
+          <button onClick={() => refetch()} className="btn btn-secondary">
             Retry
           </button>
         </div>
       )}
 
-      {/* ── Users Table ──────────────────────────────────────────────────── */}
       <UserTable
         users={filteredUsers}
         departments={departments}
