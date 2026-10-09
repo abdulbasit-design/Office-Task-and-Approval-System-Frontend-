@@ -1,26 +1,270 @@
 @import "tailwindcss";
 
+/* Theme: html[data-theme] pins light or dark; absent, the OS decides.
+   light-dark() keeps every token to one declaration per pair. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light dark;
+
+  /* Security paper and its intaglio ink */
+  --paper: light-dark(#eef1ea, #0c1813);
+  --paper-raised: light-dark(#f8faf5, #12211a);
+  --paper-sunk: light-dark(#e2e8de, #08120e);
+  --ink: light-dark(#0e2a20, #e3ebe2);
+  --ink-2: light-dark(#3d5248, #a9b8ae);
+  --ink-3: light-dark(#5b6d64, #84968b);
+  --line: light-dark(#cbd4c9, #22362c);
+  --line-strong: light-dark(#9aab9d, #3a5545);
+
+  /* Note green: fills, tints and text-on-paper variants */
+  --note: light-dark(#1e5a43, #2f7556);
+  --note-deep: light-dark(#143f2f, #3b8a66);
+  --note-ink: light-dark(#1e5a43, #7cc4a0);
+  --note-tint: light-dark(#dbe7dd, #15302a);
+
+  /* Bronze foil, reserved for seals and the awaiting-countersign state */
+  --seal: light-dark(#a9823c, #c9a35a);
+  --seal-ink: light-dark(#7a5a1f, #d8b56e);
+  --seal-tint: light-dark(#f0e6cf, #2c2514);
+
+  /* Numbering red: serials, rejection, destructive */
+  --serial: light-dark(#b42318, #f07b6e);
+  --serial-fill: light-dark(#b42318, #c4382c);
+  --serial-tint: light-dark(#f6e1dc, #36160f);
+
+  --shadow-color: light-dark(14 42 32, 0 0 0);
 }
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-sunk: var(--paper-sunk);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-note: var(--note);
+  --color-note-deep: var(--note-deep);
+  --color-note-ink: var(--note-ink);
+  --color-note-tint: var(--note-tint);
+  --color-seal: var(--seal);
+  --color-seal-ink: var(--seal-ink);
+  --color-seal-tint: var(--seal-tint);
+  --color-serial: var(--serial);
+  --color-serial-fill: var(--serial-fill);
+  --color-serial-tint: var(--serial-tint);
+
+  --font-sans: var(--font-archivo);
+  --font-display: var(--font-bodoni);
+  --font-mono: var(--font-azeret);
+
+  /* One corner language: square engraved frames. Seals and avatars are circles. */
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base ─────────────────────────────────────────────────────────── */
+html {
+  background: var(--paper);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  font-feature-settings: "kern", "liga";
+  caret-color: var(--note-ink);
+}
+
+::selection {
+  background: var(--seal-tint);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--note-ink);
+  outline-offset: 2px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+a {
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+table,
+time,
+.tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--ink-3);
+  opacity: 1;
+}
+
+/* ── World components ─────────────────────────────────────────────── */
+@layer components {
+  /* Engraved display voice: Bodoni Moda at optical size, set in caps */
+  .engraved {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Small-cap labels for table heads and field names (never above headings) */
+  .caps {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-stretch: 88%;
+  }
+
+  /* A banknote frame: hairline, gap, hairline */
+  .frame {
+    background: var(--paper-raised);
+    border: 1px solid var(--line-strong);
+    box-shadow:
+      inset 0 0 0 3px var(--paper-raised),
+      inset 0 0 0 4px var(--line),
+      0 10px 28px -18px rgb(var(--shadow-color) / 0.35);
+  }
+
+  .panel {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Fine-line intaglio ground for brand surfaces */
+  .fine-lines {
+    background-image: repeating-linear-gradient(
+      118deg,
+      color-mix(in oklab, var(--note-ink) 9%, transparent) 0 1px,
+      transparent 1px 6px
+    );
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    transition:
+      background-color 160ms var(--ease-out-expo),
+      border-color 160ms var(--ease-out-expo),
+      color 160ms var(--ease-out-expo),
+      transform 120ms var(--ease-out-expo);
+  }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .btn-primary { background: var(--note); color: #f8faf5; }
+  .btn-primary:hover:not(:disabled) { background: var(--note-deep); }
+
+  .btn-secondary {
+    background: var(--paper-raised);
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+  .btn-secondary:hover:not(:disabled) { background: var(--paper-sunk); }
+
+  .btn-ghost { color: var(--ink-2); }
+  .btn-ghost:hover:not(:disabled) { background: var(--paper-sunk); color: var(--ink); }
+
+  /* Destructive stays outline until hovered or focused */
+  .btn-danger {
+    color: var(--serial);
+    border-color: color-mix(in oklab, var(--serial) 55%, transparent);
+    background: transparent;
+  }
+  .btn-danger:hover:not(:disabled),
+  .btn-danger:focus-visible { background: var(--serial-fill); border-color: var(--serial-fill); color: #fff; }
+
+  .field-label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .input {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line-strong);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-size: 15px;
+    transition: border-color 160ms var(--ease-out-expo), box-shadow 160ms var(--ease-out-expo);
+  }
+  .input:hover:not(:disabled) { border-color: var(--ink-3); }
+  .input:focus {
+    outline: none;
+    border-color: var(--note-ink);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--note-ink) 22%, transparent);
+  }
+  .input[aria-invalid="true"] { border-color: var(--serial); }
+  .input:disabled { background: var(--paper-sunk); color: var(--ink-3); cursor: not-allowed; }
+
+  .field-error { margin-top: 0.375rem; font-size: 13px; color: var(--serial); }
+  .field-hint { margin-top: 0.375rem; font-size: 13px; color: var(--ink-3); }
+}
+
+/* ── Motion ───────────────────────────────────────────────────────── */
+@keyframes rosette-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes seal-press {
+  0% { transform: scale(1.12); opacity: 0; }
+  60% { opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rosette-draw path {
+    stroke-dasharray: 1;
+    animation: rosette-draw 2.4s var(--ease-out-expo) both;
+    animation-delay: calc(var(--i, 0) * 90ms);
+  }
+  .seal-press { animation: seal-press 520ms var(--ease-out-expo) both; }
+  .rise { animation: rise 420ms var(--ease-out-expo) both; animation-delay: calc(var(--i, 0) * 40ms); }
 }
