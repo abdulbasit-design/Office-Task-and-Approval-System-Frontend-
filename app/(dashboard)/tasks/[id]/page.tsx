@@ -450,17 +450,10 @@ export default function TaskDetailPage() {
                 </div>
               </section>
             )}
-
-            <TaskActivity
-              activityLog={task.activity_log}
-              assigneeId={task.assigned_to}
-              timestamps={{ created_at: task.created_at, submitted_at: task.submitted_at, approved_at: task.approved_at }}
-              notes={{ submission: task.submission_note, rejection: task.rejection_reason }}
-            />
           </div>
 
-          {/* ── Decision column ── */}
-          <aside className="space-y-4 lg:sticky lg:top-6">
+          {/* ── Decision column: straight after the note on small screens, sticky beside note and record on large ── */}
+          <aside className="space-y-4 lg:sticky lg:top-6 lg:col-start-2 lg:row-span-2 lg:row-start-1">
             {canDecide && (
               <section className="panel p-5" aria-labelledby="decision-heading">
                 <h2 id="decision-heading" className="font-display text-[22px] leading-tight text-ink">Your decision</h2>
@@ -554,6 +547,15 @@ export default function TaskDetailPage() {
               )}
             </section>
           </aside>
+
+          <div className="min-w-0 lg:col-start-1 lg:row-start-2">
+            <TaskActivity
+              activityLog={task.activity_log}
+              assigneeId={task.assigned_to}
+              timestamps={{ created_at: task.created_at, submitted_at: task.submitted_at, approved_at: task.approved_at }}
+              notes={{ submission: task.submission_note, rejection: task.rejection_reason }}
+            />
+          </div>
         </div>
       </div>
     </>
