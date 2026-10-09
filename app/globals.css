@@ -42,6 +42,10 @@
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 
+/* Desktop sidebar folded to an icon rail: html[data-sidebar="collapsed"], set before paint.
+   Scoped to [data-rail] so the mobile drawer and other brand marks are unaffected. */
+@custom-variant collapsed (&:where(:root[data-sidebar="collapsed"] [data-rail], :root[data-sidebar="collapsed"] [data-rail] *));
+
 /* Theme switch: the incoming theme washes across the page along the hatching
    angle with a feathered edge, like ink drawn over paper (see ThemeToggle). */
 ::view-transition-old(root),

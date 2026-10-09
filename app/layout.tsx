@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   description: "Assign work, review submissions, and countersign every decision on the record.",
 };
 
-// Runs before paint so a pinned theme never flashes the other one.
-const themeScript = `try{var d=document.documentElement,t=localStorage.getItem("theme");if(t==="light"||t==="dark")d.dataset.theme=t}catch(e){}`;
+// Runs before paint so a pinned theme or a folded sidebar never flashes the other state.
+const themeScript = `try{var d=document.documentElement,t=localStorage.getItem("theme");if(t==="light"||t==="dark")d.dataset.theme=t;if(localStorage.getItem("sidebar")==="collapsed")d.dataset.sidebar="collapsed"}catch(e){}`;
 
 const directionContract = `<!--
 THESIS: Every decision is a note of value: numbered, engraved, countersigned. Refuses the slate-card SaaS dashboard of stat tiles and pill badges.
