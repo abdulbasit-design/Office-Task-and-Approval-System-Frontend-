@@ -62,7 +62,7 @@ export default function PasswordResetRequestsPage() {
   return (
     <div className="space-y-6">
       {/* Summary */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center justify-between gap-4">
         <p className="text-[15px] text-ink-2">
           {isRequestsLoading
             ? "Loading requests..."
@@ -70,7 +70,7 @@ export default function PasswordResetRequestsPage() {
               ? "No one is waiting on a password reset."
               : `${requests.length} pending request${requests.length === 1 ? "" : "s"}, oldest first.`}
         </p>
-        <button onClick={() => refetch()} className="btn btn-ghost self-start sm:self-auto" title="Refresh requests">
+        <button onClick={() => refetch()} className="btn btn-secondary min-h-9 shrink-0 px-3" title="Refresh requests">
           <ArrowClockwise size={17} aria-hidden="true" />
           Refresh
         </button>
