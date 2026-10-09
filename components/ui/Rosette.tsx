@@ -30,7 +30,8 @@ function band(lobes: number, rings: number, base: number, amp: number, perLobe: 
   const steps = lobes * perLobe;
   const out: string[] = [];
   for (let i = 0; i < rings; i++) {
-    const phase = (i / rings) * ((2 * Math.PI) / lobes) * 2;
+    // Phases spread over a full wave period so the rings weave a lattice
+    const phase = (i / rings) * 2 * Math.PI;
     let d = "";
     for (let s = 0; s <= steps; s++) {
       const th = (s / steps) * 2 * Math.PI;

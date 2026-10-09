@@ -123,10 +123,16 @@ textarea::placeholder {
 
 /* ── World components ─────────────────────────────────────────────── */
 @layer components {
-  /* Engraved display voice: Bodoni Moda at optical size, set in caps */
+  /* Bodoni Moda's large optical master mis-spaces v and y; the text master
+     spaces correctly and its sturdier hairlines read as engraving. */
+  .font-display,
+  .engraved {
+    font-variation-settings: "opsz" 11;
+  }
+
+  /* Engraved display voice, set in caps */
   .engraved {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     font-weight: 500;
