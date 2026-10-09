@@ -42,8 +42,8 @@ export default function TaskTable({ tasks, isLoading = false, filtered = false }
   return (
     <div className="panel overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[640px] text-left text-[14px]">
-          <thead className="border-b border-line bg-paper-sunk">
+        <table className="w-full text-left text-[14px] max-sm:block sm:min-w-[640px]">
+          <thead className="border-b border-line bg-paper-sunk max-sm:hidden">
             <tr className="caps text-ink-3">
               <th scope="col" className="w-36 px-5 py-3 font-semibold">Serial</th>
               <th scope="col" className="px-4 py-3 font-semibold">Task</th>
@@ -54,7 +54,7 @@ export default function TaskTable({ tasks, isLoading = false, filtered = false }
               <th scope="col" className="w-10 px-4 py-3"><span className="sr-only">Open</span></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-line">
+          <tbody className="divide-y divide-line max-sm:block">
             {isLoading ? (
               <SkeletonRows />
             ) : tasks.length === 0 ? (
@@ -78,11 +78,11 @@ export default function TaskTable({ tasks, isLoading = false, filtered = false }
                 const due = dueLabel(task.deadline);
                 const settled = task.status === "APPROVED";
                 return (
-                  <tr key={task.id} className="rise group relative transition-colors hover:bg-paper-sunk" style={{ "--i": i } as React.CSSProperties}>
-                    <td className="px-5 py-4 align-top">
+                  <tr key={task.id} className="rise group relative transition-colors hover:bg-paper-sunk max-sm:grid max-sm:grid-cols-[1fr_auto] max-sm:gap-x-4 max-sm:gap-y-1.5 max-sm:px-4 max-sm:py-3.5" style={{ "--i": i } as React.CSSProperties}>
+                    <td className="px-5 py-4 align-top max-sm:col-start-1 max-sm:row-start-1 max-sm:p-0">
                       <Serial id={task.id} />
                     </td>
-                    <td className="max-w-md px-4 py-4 align-top">
+                    <td className="max-w-md px-4 py-4 align-top max-sm:col-span-2 max-sm:row-start-2 max-sm:max-w-none max-sm:p-0">
                       <Link
                         href={`/tasks/${task.id}`}
                         className="font-semibold text-ink after:absolute after:inset-0 group-hover:text-note-ink"
@@ -104,15 +104,15 @@ export default function TaskTable({ tasks, isLoading = false, filtered = false }
                     <td className="hidden px-4 py-4 align-top lg:table-cell">
                       <PriorityBadge priority={task.priority} />
                     </td>
-                    <td className="whitespace-nowrap px-4 py-4 align-top">
-                      <time dateTime={task.deadline} className="block text-ink">{formatDate(task.deadline)}</time>
+                    <td className="whitespace-nowrap px-4 py-4 align-top max-sm:col-start-2 max-sm:row-start-1 max-sm:flex max-sm:items-baseline max-sm:gap-2 max-sm:p-0 max-sm:text-[13px]">
+                      <time dateTime={task.deadline} className={`block text-ink ${settled ? "" : "max-sm:hidden"}`}>{formatDate(task.deadline)}</time>
                       {!settled && (
                         <span className={`text-[12px] ${due.overdue ? "text-serial" : due.soon ? "font-medium text-ink-2" : "text-ink-3"}`}>
                           {due.text}
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-4 align-top text-ink-3 group-hover:text-note-ink">
+                    <td className="px-4 py-4 align-top text-ink-3 group-hover:text-note-ink max-sm:hidden">
                       <CaretRight size={16} aria-hidden="true" className="nudge" />
                     </td>
                   </tr>
