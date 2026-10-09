@@ -6,6 +6,7 @@ import type { TaskCreate, TaskUpdate, TaskResponse } from "@/lib/api/taskApi";
 import { useGetUsersQuery } from "@/lib/api/userApi";
 import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
 import Segmented from "@/components/ui/Segmented";
+import DeadlinePicker from "./DeadlinePicker";
 import { PriorityBars } from "./TaskStatusBadge";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -247,17 +248,15 @@ export default function TaskForm({
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field id="task-deadline" label="Deadline" required error={errors.deadline}>
-          <input
+          <DeadlinePicker
             id="task-deadline"
-            type="datetime-local"
             value={deadline}
-            onChange={(e) => {
-              setDeadline(e.target.value);
+            onChange={(v) => {
+              setDeadline(v);
               if (errors.deadline) setErrors((p) => ({ ...p, deadline: undefined }));
             }}
-            className="input tabular"
-            aria-invalid={errors.deadline ? true : undefined}
-            aria-describedby={described("task-deadline", errors.deadline)}
+            invalid={Boolean(errors.deadline)}
+            describedBy={described("task-deadline", errors.deadline)}
             disabled={isLoading}
           />
         </Field>

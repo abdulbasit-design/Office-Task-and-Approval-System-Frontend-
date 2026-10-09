@@ -391,6 +391,35 @@ textarea::placeholder {
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* Deadline drums: no scrollbar, values fade toward the drum's edges.
+   Unlayered so it beats the global thin-scrollbar rule. */
+.drum { scrollbar-width: none; mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent); }
+.drum::-webkit-scrollbar { display: none; }
+
+/* A drum cell turns on its cylinder as it rolls through the window */
+@keyframes drum-turn {
+  0% { transform: perspective(220px) rotateX(-62deg) scale(0.9); opacity: 0.15; }
+  50% { transform: none; opacity: 1; }
+  100% { transform: perspective(220px) rotateX(62deg) scale(0.9); opacity: 0.15; }
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+}
+
+@keyframes page-next {
+  from { opacity: 0; transform: translateX(18px); }
+}
+
+@keyframes page-prev {
+  from { opacity: 0; transform: translateX(-18px); }
+}
+
+@keyframes ink-ripple {
+  from { opacity: 0.5; transform: scale(0.75); }
+  to { opacity: 0; transform: scale(1.75); }
+}
+
 @keyframes refresh-turn {
   to { transform: rotate(360deg); }
 }
@@ -454,6 +483,28 @@ textarea::placeholder {
   .rise { animation: rise 420ms var(--ease-out-expo) both; animation-delay: calc(var(--i, 0) * 40ms); }
   .icon-turn { animation: icon-turn 480ms var(--ease-out-expo) both; }
   .refresh-turn { animation: refresh-turn 900ms cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+
+  /* Deadline picker: pages turn toward the month you head for; the chosen day is stamped and the ink spreads */
+  /* The deadline slip: a sheet rising on phones, a menu unfolding from its field elsewhere */
+  .picker { animation: sheet-up 380ms var(--ease-out-expo) both; }
+  @media (min-width: 40rem) {
+    .picker { animation: unfold 220ms var(--ease-out-expo) both; transform-origin: top left; }
+    .picker[data-place="up"] { transform-origin: bottom left; }
+  }
+  .page-next { animation: page-next 380ms var(--ease-out-expo) both; }
+  .page-prev { animation: page-prev 380ms var(--ease-out-expo) both; }
+  .ink-stamp { animation: stamp 520ms var(--ease-out-expo) both; }
+  .ink-stamp::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border: 1.5px solid var(--note-ink);
+    border-radius: var(--radius-sm);
+    animation: ink-ripple 720ms var(--ease-out-expo) 140ms both;
+  }
+  @supports (animation-timeline: view()) {
+    .drum-cell { animation: drum-turn linear both; animation-timeline: view(); }
+  }
 
   /* Select lists unfold like the other menus; the caret turns as they open */
   @supports (appearance: base-select) {
