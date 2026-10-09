@@ -15,7 +15,7 @@ const STATUS_CONFIG: Record<Status, { label: string; className: string }> = {
 
 const PRIORITY_CONFIG: Record<Priority, { label: string; className: string; bars: number }> = {
   HIGH: { label: "High", className: "text-serial", bars: 3 },
-  MEDIUM: { label: "Medium", className: "text-seal-ink", bars: 2 },
+  MEDIUM: { label: "Medium", className: "text-ink-2", bars: 2 },
   LOW: { label: "Low", className: "text-ink-3", bars: 1 },
 };
 
