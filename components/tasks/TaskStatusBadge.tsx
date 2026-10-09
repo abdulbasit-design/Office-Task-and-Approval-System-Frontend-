@@ -9,7 +9,7 @@ type Priority = TaskResponse["priority"];
 const STATUS_CONFIG: Record<Status, { label: string; className: string }> = {
   PENDING: { label: "Pending", className: "text-ink-2 border-line-strong bg-paper-sunk" },
   SUBMITTED: { label: "Submitted", className: "text-seal-ink border-seal bg-seal-tint" },
-  APPROVED: { label: "Approved", className: "text-note-ink border-note-ink/60 bg-note-tint" },
+  APPROVED: { label: "Approved", className: "text-ok border-ok/60 bg-ok-tint" },
   REJECTED: { label: "Rejected", className: "text-serial border-serial/60 bg-serial-tint" },
 };
 

@@ -5,37 +5,61 @@
 :root {
   color-scheme: light dark;
 
-  /* Security paper and its intaglio ink */
-  --paper: light-dark(#eef1ea, #0c1813);
-  --paper-raised: light-dark(#f8faf5, #12211a);
-  --paper-sunk: light-dark(#e2e8de, #08120e);
-  --ink: light-dark(#0e2a20, #e3ebe2);
-  --ink-2: light-dark(#3d5248, #a9b8ae);
-  --ink-3: light-dark(#5b6d64, #84968b);
-  --line: light-dark(#cbd4c9, #22362c);
-  --line-strong: light-dark(#9aab9d, #3a5545);
+  /* Charcoal + Bronze: neutral security paper, charcoal intaglio ink */
+  --paper: light-dark(#f3f3f2, #111214);
+  --paper-raised: light-dark(#fbfbfa, #18191c);
+  --paper-sunk: light-dark(#e8e8e6, #0b0c0d);
+  --ink: light-dark(#17191c, #e8e8e6);
+  --ink-2: light-dark(#44474d, #abadb2);
+  --ink-3: light-dark(#62666d, #878a91);
+  --line: light-dark(#d6d6d3, #2a2c30);
+  --line-strong: light-dark(#a3a5a8, #484b51);
 
-  /* Note green: fills, tints and text-on-paper variants */
-  --note: light-dark(#1e5a43, #2f7556);
-  --note-deep: light-dark(#143f2f, #3b8a66);
-  --note-ink: light-dark(#1e5a43, #7cc4a0);
-  --note-tint: light-dark(#dbe7dd, #15302a);
+  /* Brand ink ("note"): charcoal fills, links, active states; inverts in dark */
+  --note: light-dark(#1f2328, #e8e8e6);
+  --note-deep: light-dark(#0b0d10, #f7f7f6);
+  --note-ink: light-dark(#1f2328, #e8e8e6);
+  --note-tint: light-dark(#e2e2df, #26282c);
+  --on-note: light-dark(#fafaf9, #141518);
+
+  /* Approved and success, status only */
+  --ok: light-dark(#2f6b4f, #7fc4a0);
+  --ok-tint: light-dark(#e1ece5, #15291f);
 
   /* Bronze foil, reserved for seals and the awaiting-countersign state */
-  --seal: light-dark(#a9823c, #c9a35a);
+  --seal: light-dark(#a47e3b, #c9a35a);
   --seal-ink: light-dark(#7a5a1f, #d8b56e);
-  --seal-tint: light-dark(#f0e6cf, #2c2514);
+  --seal-tint: light-dark(#f1e8d6, #2b2416);
 
   /* Numbering red: serials, rejection, destructive */
   --serial: light-dark(#b42318, #f07b6e);
   --serial-fill: light-dark(#b42318, #c4382c);
-  --serial-tint: light-dark(#f6e1dc, #36160f);
+  --serial-tint: light-dark(#f7e4e1, #351612);
 
-  --shadow-color: light-dark(14 42 32, 0 0 0);
+  --shadow-color: light-dark(23 25 28, 0 0 0);
 }
 
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
+
+/* Theme switch: the incoming theme washes across the page along the hatching
+   angle with a feathered edge, like ink drawn over paper (see ThemeToggle). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  -webkit-mask: linear-gradient(118deg, #000 42%, transparent 58%) 100% 0 / 300% 100% no-repeat;
+  mask: linear-gradient(118deg, #000 42%, transparent 58%) 100% 0 / 300% 100% no-repeat;
+  animation: theme-wash 760ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes theme-wash {
+  from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+  to { -webkit-mask-position: 0 0; mask-position: 0 0; }
+}
 
 @theme inline {
   --color-paper: var(--paper);
@@ -50,6 +74,9 @@
   --color-note-deep: var(--note-deep);
   --color-note-ink: var(--note-ink);
   --color-note-tint: var(--note-tint);
+  --color-on-note: var(--on-note);
+  --color-ok: var(--ok);
+  --color-ok-tint: var(--ok-tint);
   --color-seal: var(--seal);
   --color-seal-ink: var(--seal-ink);
   --color-seal-tint: var(--seal-tint);
@@ -194,7 +221,7 @@ textarea::placeholder {
   .btn:active:not(:disabled) { transform: translateY(1px); }
   .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
-  .btn-primary { background: var(--note); color: #f8faf5; }
+  .btn-primary { background: var(--note); color: var(--on-note); }
   .btn-primary:hover:not(:disabled) { background: var(--note-deep); }
 
   .btn-secondary {
@@ -260,6 +287,11 @@ textarea::placeholder {
   100% { transform: scale(1); opacity: 1; }
 }
 
+@keyframes icon-turn {
+  from { transform: rotate(-90deg) scale(0.6); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
 @keyframes rise {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: none; }
@@ -273,4 +305,5 @@ textarea::placeholder {
   }
   .seal-press { animation: seal-press 520ms var(--ease-out-expo) both; }
   .rise { animation: rise 420ms var(--ease-out-expo) both; animation-delay: calc(var(--i, 0) * 40ms); }
+  .icon-turn { animation: icon-turn 480ms var(--ease-out-expo) both; }
 }

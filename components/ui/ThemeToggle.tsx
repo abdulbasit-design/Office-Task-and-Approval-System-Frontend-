@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useSyncExternalStore } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import { Desktop, Moon, Sun } from "@phosphor-icons/react";
 
 type Theme = "system" | "light" | "dark";
@@ -30,6 +30,13 @@ function apply(theme: Theme) {
   listeners.forEach((l) => l());
 }
 
+/** Apply the theme; where supported, the new one washes across the page (CSS in globals.css). */
+function switchTo(theme: Theme) {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (typeof document.startViewTransition !== "function" || reduce) apply(theme);
+  else document.startViewTransition(() => apply(theme));
+}
+
 function subscribe(listener: () => void) {
   listeners.add(listener);
   return () => {
@@ -37,21 +44,26 @@ function subscribe(listener: () => void) {
   };
 }
 
-/** Cycles System → Light → Dark. The icon shows the current setting. */
+/** Cycles System, Light, Dark. The icon shows the current setting. */
 export default function ThemeToggle({ className = "" }: { className?: string }) {
   const theme = useSyncExternalStore(subscribe, read, () => "system" as Theme);
+  const [turned, setTurned] = useState(false);
   const next = ORDER[(ORDER.indexOf(theme) + 1) % ORDER.length];
   const Icon = theme === "light" ? Sun : theme === "dark" ? Moon : Desktop;
 
   return (
     <button
       type="button"
-      onClick={() => apply(next)}
+      onClick={() => {
+        setTurned(true);
+        switchTo(next);
+      }}
       aria-label={`${LABEL[theme]}. Switch to ${LABEL[next].toLowerCase()}`}
       title={`${LABEL[theme]} (click for ${LABEL[next].toLowerCase()})`}
       className={`btn btn-ghost w-9 min-h-9 px-0 ${className}`}
     >
-      <Icon size={18} weight="regular" />
+      {/* Re-keyed per theme so the quarter turn replays on each click, never on load */}
+      <Icon key={theme} size={18} weight="regular" className={turned ? "icon-turn" : undefined} />
     </button>
   );
 }

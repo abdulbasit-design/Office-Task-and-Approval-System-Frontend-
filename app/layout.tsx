@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 // Runs before paint so a pinned theme never flashes the other one.
-const themeScript = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+const themeScript = `try{var d=document.documentElement,t=localStorage.getItem("theme");if(t==="light"||t==="dark")d.dataset.theme=t}catch(e){}`;
 
 const directionContract = `<!--
 THESIS: Every decision is a note of value: numbered, engraved, countersigned. Refuses the slate-card SaaS dashboard of stat tiles and pill badges.
