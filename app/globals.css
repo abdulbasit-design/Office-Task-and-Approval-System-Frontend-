@@ -244,6 +244,15 @@ textarea::placeholder {
   .btn-primary { background: var(--note); color: var(--on-note); }
   .btn-primary:hover:not(:disabled) { background: var(--note-deep); }
 
+  /* Segmented controls: one ink plate glides to the active option and stretches to its width */
+  .segment-plate {
+    transition:
+      transform 420ms var(--ease-out-expo),
+      width 420ms var(--ease-out-expo),
+      height 420ms var(--ease-out-expo),
+      opacity 160ms ease-out;
+  }
+
   .btn-secondary {
     background: var(--paper-raised);
     color: var(--ink);

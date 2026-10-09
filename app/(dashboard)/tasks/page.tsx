@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { MagnifyingGlass, Plus, WarningCircle } from "@phosphor-icons/react";
 import RefreshButton from "@/components/ui/RefreshButton";
+import Segmented from "@/components/ui/Segmented";
 import { useGetTasksQuery } from "@/lib/api/taskApi";
 import { useGetMeQuery } from "@/lib/api/authApi";
 import TaskTable from "@/components/tasks/TaskTable";
@@ -71,29 +72,13 @@ function TasksView({ initialStatus }: { initialStatus: StatusFilter }) {
       </div>
 
       <div className="panel flex flex-col gap-3 p-3 lg:flex-row lg:items-center">
-        <div role="group" aria-label="Filter by status" className="flex flex-wrap gap-1">
-          {STATUSES.map(({ value, label }) => {
-            const active = statusFilter === value;
-            return (
-              <button
-                key={value}
-                type="button"
-                aria-pressed={active}
-                onClick={() => setStatusFilter(value)}
-                className={`btn min-h-9 gap-2 px-3 text-[14px] ${
-                  active
-                    ? "bg-note-tint text-note-ink shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--note-ink)_30%,transparent)]"
-                    : "btn-ghost"
-                }`}
-              >
-                {label}
-                <span className={`font-display text-[16px] leading-none tabular ${active ? "" : "text-ink-3"}`}>
-                  {isLoading ? "" : countFor(value)}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <Segmented
+          label="Filter by status"
+          value={statusFilter}
+          onChange={setStatusFilter}
+          showCounts={!isLoading}
+          options={STATUSES.map(({ value, label }) => ({ value, label, count: countFor(value) }))}
+        />
 
         <div className="flex flex-1 flex-col gap-2 sm:flex-row lg:justify-end">
           <div className="relative sm:w-72">
@@ -146,7 +131,8 @@ function TasksView({ initialStatus }: { initialStatus: StatusFilter }) {
         </div>
       )}
 
-      {!isError && <TaskTable tasks={filtered} isLoading={isLoading} filtered={filtering} />}
+      {/* Re-keyed per filter so the rows rise in again when the tab changes */}
+      {!isError && <TaskTable key={`${statusFilter}-${priorityFilter}`} tasks={filtered} isLoading={isLoading} filtered={filtering} />}
     </div>
   );
 }

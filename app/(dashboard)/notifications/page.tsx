@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { ArrowClockwise, Checks, CircleNotch, WarningCircle } from "@phosphor-icons/react";
 import RefreshButton from "@/components/ui/RefreshButton";
+import Segmented from "@/components/ui/Segmented";
 import { useGetNotificationsQuery, useMarkNotificationReadMutation } from "@/lib/api/notificationApi";
 import type { NotificationResponse } from "@/lib/api/notificationApi";
 import NotificationItem from "@/components/notifications/NotificationItem";
@@ -211,31 +212,17 @@ export default function NotificationsPage() {
 
       {/* ── Filter: segmented control ──────────────────────────────────── */}
       {!isError && (
-        <div role="group" aria-label="Filter notifications" className="flex flex-wrap items-center gap-1">
-          {(
-            [
-              { key: "ALL",    label: "All",    count: totalCount  },
-              { key: "UNREAD", label: "Unread", count: unreadCount },
-              { key: "READ",   label: "Read",   count: readCount   },
-            ] as const
-          ).map(({ key, label, count }) => {
-            const active = filter === key;
-            return (
-              <button
-                key={key}
-                id={`filter-${key.toLowerCase()}`}
-                onClick={() => setFilter(key)}
-                aria-pressed={active}
-                className={`btn btn-ghost min-h-9 px-3 ${active ? "bg-note-tint text-note-ink" : ""}`}
-              >
-                {label}
-                {!isLoading && (
-                  <span className={`tabular font-medium ${active ? "text-note-ink" : "text-ink-3"}`}>{count}</span>
-                )}
-              </button>
-            );
-          })}
-        </div>
+        <Segmented
+          label="Filter notifications"
+          value={filter}
+          onChange={setFilter}
+          showCounts={!isLoading}
+          options={[
+            { value: "ALL", label: "All", count: totalCount },
+            { value: "UNREAD", label: "Unread", count: unreadCount },
+            { value: "READ", label: "Read", count: readCount },
+          ]}
+        />
       )}
 
       {/* ── Notifications ledger ───────────────────────────────────────── */}
@@ -261,6 +248,7 @@ export default function NotificationsPage() {
         {/* Notification list, grouped by day */}
         {!isLoading && !isError && filtered.length > 0 && (
           <ol
+            key={filter}
             className="divide-y divide-line"
             aria-label={`${filter === "ALL" ? "All" : filter === "UNREAD" ? "Unread" : "Read"} notifications`}
           >
