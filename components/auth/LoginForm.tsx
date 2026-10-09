@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import { CheckCircle, CircleNotch, Eye, EyeSlash, WarningCircle } from "@phosphor-icons/react";
 import { useLoginMutation } from "@/lib/api/authApi";
 import { setAccessToken } from "@/lib/slices/authSlice";
 import { apiSlice } from "@/lib/api/apiSlice";
@@ -87,68 +88,28 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-[400px] bg-white rounded-2xl border border-slate-200/90 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-7 sm:p-9 text-slate-900">
-      {/* Top Clipboard Icon */}
-      <div className="flex justify-center">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shadow-xs">
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 28 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-slate-800"
-            aria-hidden="true"
-          >
-            <rect x="5.5" y="4.5" width="17" height="19.5" rx="3.5" fill="#1e293b" />
-            <rect x="9" y="3" width="10" height="3.5" rx="1.75" fill="#475569" />
-            <rect x="11" y="4" width="6" height="1.5" rx="0.75" fill="#94a3b8" />
-            <line x1="9" y1="10.5" x2="16" y2="10.5" stroke="#64748b" strokeWidth="1.5" strokeLinecap="round" />
-            <line x1="9" y1="14" x2="14" y2="14" stroke="#64748b" strokeWidth="1.5" strokeLinecap="round" />
-            <circle cx="18.5" cy="19.5" r="4" fill="#2563eb" stroke="#1e293b" strokeWidth="1.5" />
-            <path d="M16.8 19.5L17.9 20.6L20.2 18.3" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-      </div>
+    <div>
+      <h1 className="font-display text-[30px] leading-tight text-ink">Sign in</h1>
+      <p className="mt-1.5 text-[15px] text-ink-2">Access your workspace and your tasks.</p>
 
-      {/* Brand & Heading */}
-      <div className="text-center mt-3">
-        <h2 className="text-sm font-semibold text-slate-800 tracking-tight">
-          Office Task &amp; Approval System
-        </h2>
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight mt-3">
-          Welcome back
-        </h1>
-        <p className="text-xs text-slate-500 mt-1 max-w-[260px] mx-auto leading-relaxed">
-          Sign in to access your workspace and manage your tasks.
-        </p>
-      </div>
-
-      {/* Feedback Alerts */}
       {apiError && (
-        <div role="alert" className="mt-4 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2">
-          <svg className="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-          </svg>
+        <div role="alert" className="mt-6 flex items-start gap-2.5 rounded-sm border border-serial/50 bg-serial-tint p-3 text-[14px] text-ink">
+          <WarningCircle size={18} className="mt-0.5 shrink-0 text-serial" aria-hidden="true" />
           <span>{apiError}</span>
         </div>
       )}
 
       {successMessage && (
-        <div role="status" className="mt-4 p-3 rounded-lg bg-green-50 border border-green-200 text-xs text-green-700 flex items-center gap-2">
-          <svg className="w-4 h-4 text-green-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-          </svg>
+        <div role="status" className="mt-6 flex items-start gap-2.5 rounded-sm border border-ok/40 bg-ok-tint p-3 text-[14px] text-ok">
+          <CheckCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
           <span>{successMessage}</span>
         </div>
       )}
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="mt-5 space-y-4" noValidate>
-        {/* Email Field */}
+      <form onSubmit={handleSubmit} className="mt-6 space-y-5" noValidate>
         <div>
-          <label htmlFor="login-email" className="block text-xs font-semibold text-slate-700 mb-1.5">
-            Corporate Email <span className="text-red-500 font-bold">*</span>
+          <label htmlFor="login-email" className="field-label">
+            Email
           </label>
           <input
             id="login-email"
@@ -159,26 +120,24 @@ export default function LoginForm() {
               setEmail(e.target.value);
               if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
             }}
-            placeholder="Enter your email"
-            className={`w-full px-3.5 py-2.5 text-sm bg-white border rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none transition-colors ${
-              fieldErrors.email
-                ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
-                : "border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/15"
-            }`}
+            placeholder="name@company.com"
+            aria-invalid={!!fieldErrors.email}
+            aria-describedby={fieldErrors.email ? "login-email-error" : undefined}
+            className="input"
           />
-          {fieldErrors.email && <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
+          {fieldErrors.email && (
+            <p id="login-email-error" className="field-error">
+              {fieldErrors.email}
+            </p>
+          )}
         </div>
 
-        {/* Password Field */}
         <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label htmlFor="login-password" className="text-xs font-semibold text-slate-700">
-              Password <span className="text-red-500 font-bold">*</span>
+          <div className="mb-1.5 flex items-baseline justify-between gap-3">
+            <label htmlFor="login-password" className="field-label mb-0">
+              Password
             </label>
-            <Link
-              href="/forgot-password"
-              className="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline"
-            >
+            <Link href="/forgot-password" className="text-[13px] font-semibold text-note-ink hover:underline">
               Forgot password?
             </Link>
           </div>
@@ -192,65 +151,44 @@ export default function LoginForm() {
                 setPassword(e.target.value);
                 if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: undefined }));
               }}
-              placeholder="Enter your password"
-              className={`w-full pl-3.5 pr-10 py-2.5 text-sm bg-white border rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none transition-colors ${
-                fieldErrors.password
-                  ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
-                  : "border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/15"
-              }`}
+              aria-invalid={!!fieldErrors.password}
+              aria-describedby={fieldErrors.password ? "login-password-error" : undefined}
+              className="input pr-11"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+              className="absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-sm text-ink-3 transition-colors hover:text-ink"
             >
-              {showPassword ? (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
-                </svg>
-              ) : (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-              )}
+              {showPassword ? <EyeSlash size={18} /> : <Eye size={18} />}
             </button>
           </div>
-          {fieldErrors.password && <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>}
+          {fieldErrors.password && (
+            <p id="login-password-error" className="field-error">
+              {fieldErrors.password}
+            </p>
+          )}
         </div>
 
-
-        {/* Submit Button */}
-        <button
-          id="login-submit-button"
-          type="submit"
-          disabled={isLoading}
-          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow transition duration-150 ease-in-out disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer mt-2"
-        >
+        <button id="login-submit-button" type="submit" disabled={isLoading} className="btn btn-primary w-full min-h-11 text-[15px]">
           {isLoading ? (
             <>
-              <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
-              <span>Signing In...</span>
+              <CircleNotch size={16} className="animate-spin" aria-hidden="true" />
+              <span>Signing in...</span>
             </>
           ) : (
-            <span>Sign In</span>
+            <span>Sign in</span>
           )}
         </button>
       </form>
 
-      {/* Switch to Signup Link */}
-      <div className="text-center mt-6">
-        <p className="text-xs text-slate-500">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
-            Sign up
-          </Link>
-        </p>
-      </div>
+      <p className="mt-6 border-t border-line pt-5 text-center text-[14px] text-ink-2">
+        Don&apos;t have an account?{" "}
+        <Link href="/signup" className="font-semibold text-note-ink hover:underline">
+          Create an account
+        </Link>
+      </p>
     </div>
   );
 }
