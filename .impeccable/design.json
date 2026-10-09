@@ -1,0 +1,796 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-09T17:53:37.801Z",
+  "title": "Design System: Countersign",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Security Paper",
+        "canonical": "light-dark(#f3f3f2, #111214)",
+        "light": "#f3f3f2",
+        "dark": "#111214",
+        "lightOklch": "oklch(96.4% 0.001 106.4)",
+        "darkOklch": "oklch(18.2% 0.004 264.5)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252524",
+          "#424241",
+          "#616160",
+          "#828281",
+          "#a5a5a4",
+          "#c9c9c8",
+          "#eeeeed"
+        ]
+      },
+      "paper-raised": {
+        "role": "neutral",
+        "displayName": "Raised Sheet",
+        "canonical": "light-dark(#fbfbfa, #18191c)",
+        "light": "#fbfbfa",
+        "dark": "#18191c",
+        "lightOklch": "oklch(98.8% 0.001 106.4)",
+        "darkOklch": "oklch(21.4% 0.006 271.1)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252524",
+          "#424241",
+          "#616160",
+          "#828281",
+          "#a5a5a4",
+          "#c9c9c8",
+          "#eeeeed"
+        ]
+      },
+      "paper-sunk": {
+        "role": "neutral",
+        "displayName": "Sunk Plate",
+        "canonical": "light-dark(#e8e8e6, #0b0c0d)",
+        "light": "#e8e8e6",
+        "dark": "#0b0c0d",
+        "lightOklch": "oklch(93.0% 0.003 106.5)",
+        "darkOklch": "oklch(15.4% 0.003 248.0)",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#252524",
+          "#424240",
+          "#616160",
+          "#828281",
+          "#a5a5a3",
+          "#c9c9c7",
+          "#eeeeec"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "light-dark(#17191c, #e8e8e6)",
+        "light": "#17191c",
+        "dark": "#e8e8e6",
+        "lightOklch": "oklch(21.3% 0.007 258.4)",
+        "darkOklch": "oklch(93.0% 0.003 106.5)",
+        "tonalRamp": [
+          "#090b0e",
+          "#232528",
+          "#404246",
+          "#5f6165",
+          "#808286",
+          "#a2a5a9",
+          "#c6c9cd",
+          "#eceff3"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "light-dark(#44474d, #abadb2)",
+        "light": "#44474d",
+        "dark": "#abadb2",
+        "lightOklch": "oklch(39.7% 0.011 264.4)",
+        "darkOklch": "oklch(74.8% 0.007 268.5)",
+        "tonalRamp": [
+          "#090b10",
+          "#22252a",
+          "#3f4248",
+          "#5e6168",
+          "#7f8289",
+          "#a2a5ac",
+          "#c6c9d0",
+          "#ebeff6"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3",
+        "canonical": "light-dark(#62666d, #878a91)",
+        "light": "#62666d",
+        "dark": "#878a91",
+        "lightOklch": "oklch(50.9% 0.012 261.8)",
+        "darkOklch": "oklch(63.3% 0.011 267.3)",
+        "tonalRamp": [
+          "#080b10",
+          "#22252b",
+          "#3e4249",
+          "#5d6168",
+          "#7e828a",
+          "#a1a5ad",
+          "#c5c9d1",
+          "#eaeff7"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "light-dark(#d6d6d3, #2a2c30)",
+        "light": "#d6d6d3",
+        "dark": "#2a2c30",
+        "lightOklch": "oklch(87.5% 0.004 106.5)",
+        "darkOklch": "oklch(29.3% 0.008 264.4)",
+        "tonalRamp": [
+          "#0b0b09",
+          "#252523",
+          "#424240",
+          "#61615f",
+          "#828280",
+          "#a5a5a2",
+          "#c9c9c6",
+          "#efefec"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Rule",
+        "canonical": "light-dark(#a3a5a8, #484b51)",
+        "light": "#a3a5a8",
+        "dark": "#484b51",
+        "lightOklch": "oklch(72.1% 0.005 258.3)",
+        "darkOklch": "oklch(41.2% 0.011 264.5)",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242527",
+          "#404245",
+          "#5f6164",
+          "#808285",
+          "#a3a5a8",
+          "#c7c9cc",
+          "#eceff2"
+        ]
+      },
+      "note": {
+        "role": "primary",
+        "displayName": "Charcoal Intaglio",
+        "canonical": "light-dark(#1f2328, #e8e8e6)",
+        "light": "#1f2328",
+        "dark": "#e8e8e6",
+        "lightOklch": "oklch(25.4% 0.011 254.0)",
+        "darkOklch": "oklch(93.0% 0.003 106.5)",
+        "tonalRamp": [
+          "#080b10",
+          "#21252a",
+          "#3e4248",
+          "#5d6268",
+          "#7e8389",
+          "#a0a6ac",
+          "#c4cad0",
+          "#e9eff6"
+        ]
+      },
+      "note-deep": {
+        "role": "primary",
+        "displayName": "Engraver's Black",
+        "canonical": "light-dark(#0b0d10, #f7f7f6)",
+        "light": "#0b0d10",
+        "dark": "#f7f7f6",
+        "lightOklch": "oklch(15.8% 0.007 258.4)",
+        "darkOklch": "oklch(97.6% 0.001 106.4)",
+        "tonalRamp": [
+          "#090b0e",
+          "#232529",
+          "#404246",
+          "#5f6165",
+          "#808287",
+          "#a2a5aa",
+          "#c6c9ce",
+          "#ebeff3"
+        ]
+      },
+      "note-ink": {
+        "role": "primary",
+        "displayName": "Charcoal Link Ink",
+        "canonical": "light-dark(#1f2328, #e8e8e6)",
+        "light": "#1f2328",
+        "dark": "#e8e8e6",
+        "lightOklch": "oklch(25.4% 0.011 254.0)",
+        "darkOklch": "oklch(93.0% 0.003 106.5)",
+        "tonalRamp": [
+          "#080b10",
+          "#21252a",
+          "#3e4248",
+          "#5d6268",
+          "#7e8389",
+          "#a0a6ac",
+          "#c4cad0",
+          "#e9eff6"
+        ]
+      },
+      "note-tint": {
+        "role": "primary",
+        "displayName": "Pressed Charcoal Tint",
+        "canonical": "light-dark(#e2e2df, #26282c)",
+        "light": "#e2e2df",
+        "dark": "#26282c",
+        "lightOklch": "oklch(91.2% 0.004 106.5)",
+        "darkOklch": "oklch(27.6% 0.008 264.4)",
+        "tonalRamp": [
+          "#0b0b09",
+          "#252523",
+          "#424240",
+          "#61615f",
+          "#828280",
+          "#a5a5a2",
+          "#c9c9c6",
+          "#efefec"
+        ]
+      },
+      "on-note": {
+        "role": "primary",
+        "displayName": "Note White",
+        "canonical": "light-dark(#fafaf9, #141518)",
+        "light": "#fafaf9",
+        "dark": "#141518",
+        "lightOklch": "oklch(98.5% 0.001 106.4)",
+        "darkOklch": "oklch(19.6% 0.006 271.1)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252524",
+          "#424241",
+          "#616160",
+          "#828281",
+          "#a5a5a4",
+          "#c9c9c8",
+          "#eeeeed"
+        ]
+      },
+      "seal": {
+        "role": "secondary",
+        "displayName": "Bronze Foil",
+        "canonical": "light-dark(#a47e3b, #c9a35a)",
+        "light": "#a47e3b",
+        "dark": "#c9a35a",
+        "lightOklch": "oklch(61.7% 0.097 79.5)",
+        "darkOklch": "oklch(73.5% 0.102 82.3)",
+        "tonalRamp": [
+          "#120900",
+          "#332100",
+          "#573c03",
+          "#7e5a0e",
+          "#a17b38",
+          "#c59e5c",
+          "#ebc27f",
+          "#ffeccd"
+        ]
+      },
+      "seal-ink": {
+        "role": "secondary",
+        "displayName": "Bronze Ink",
+        "canonical": "light-dark(#7a5a1f, #d8b56e)",
+        "light": "#7a5a1f",
+        "dark": "#d8b56e",
+        "lightOklch": "oklch(49.0% 0.086 79.3)",
+        "darkOklch": "oklch(78.9% 0.098 84.0)",
+        "tonalRamp": [
+          "#120900",
+          "#332101",
+          "#583c01",
+          "#7b5b20",
+          "#9e7c43",
+          "#c29f66",
+          "#e7c389",
+          "#ffecce"
+        ]
+      },
+      "seal-tint": {
+        "role": "secondary",
+        "displayName": "Foil Tint",
+        "canonical": "light-dark(#f1e8d6, #2b2416)",
+        "light": "#f1e8d6",
+        "dark": "#2b2416",
+        "lightOklch": "oklch(93.3% 0.026 84.6)",
+        "darkOklch": "oklch(26.4% 0.026 84.2)",
+        "tonalRamp": [
+          "#100a01",
+          "#2b2416",
+          "#484132",
+          "#686051",
+          "#8a8171",
+          "#ada493",
+          "#d1c8b7",
+          "#f7eedb"
+        ]
+      },
+      "serial": {
+        "role": "tertiary",
+        "displayName": "Numbering Red",
+        "canonical": "light-dark(#b42318, #f07b6e)",
+        "light": "#b42318",
+        "dark": "#f07b6e",
+        "lightOklch": "oklch(50.0% 0.182 29.5)",
+        "darkOklch": "oklch(71.3% 0.146 27.8)",
+        "tonalRamp": [
+          "#1f0000",
+          "#4d0000",
+          "#800200",
+          "#b12015",
+          "#da4a3b",
+          "#fe7462",
+          "#feb3a7",
+          "#fee9e5"
+        ]
+      },
+      "serial-fill": {
+        "role": "tertiary",
+        "displayName": "Numbering Red Fill",
+        "canonical": "light-dark(#b42318, #c4382c)",
+        "light": "#b42318",
+        "dark": "#c4382c",
+        "lightOklch": "oklch(50.0% 0.182 29.5)",
+        "darkOklch": "oklch(54.9% 0.179 29.1)",
+        "tonalRamp": [
+          "#1f0000",
+          "#4d0000",
+          "#800200",
+          "#b12015",
+          "#da4a3b",
+          "#fe7462",
+          "#feb3a7",
+          "#fee9e5"
+        ]
+      },
+      "serial-tint": {
+        "role": "tertiary",
+        "displayName": "Red Tint",
+        "canonical": "light-dark(#f7e4e1, #351612)",
+        "light": "#f7e4e1",
+        "dark": "#351612",
+        "lightOklch": "oklch(93.3% 0.021 28.3)",
+        "darkOklch": "oklch(24.5% 0.051 28.9)",
+        "tonalRamp": [
+          "#130806",
+          "#2f211f",
+          "#4d3e3c",
+          "#6d5d5a",
+          "#8f7e7b",
+          "#b2a09e",
+          "#d7c4c1",
+          "#fdeae7"
+        ]
+      },
+      "ok": {
+        "role": "tertiary",
+        "displayName": "Approval Green",
+        "canonical": "light-dark(#2f6b4f, #7fc4a0)",
+        "light": "#2f6b4f",
+        "dark": "#7fc4a0",
+        "lightOklch": "oklch(47.9% 0.078 161.1)",
+        "darkOklch": "oklch(76.4% 0.087 160.6)",
+        "tonalRamp": [
+          "#000f07",
+          "#012d1c",
+          "#0c4e34",
+          "#336f53",
+          "#559173",
+          "#78b595",
+          "#9cd9b9",
+          "#c3ffdf"
+        ]
+      },
+      "ok-tint": {
+        "role": "tertiary",
+        "displayName": "Approval Tint",
+        "canonical": "light-dark(#e1ece5, #15291f)",
+        "light": "#e1ece5",
+        "dark": "#15291f",
+        "lightOklch": "oklch(93.3% 0.015 158.2)",
+        "darkOklch": "oklch(26.0% 0.032 161.3)",
+        "tonalRamp": [
+          "#060d09",
+          "#1f2722",
+          "#3c453f",
+          "#5a645e",
+          "#7b857f",
+          "#9ea8a1",
+          "#c2ccc5",
+          "#e7f2eb"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Landing hero line only; 44px, 58px at sm, 64px at lg."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Landing section headings; 34px, 40px at sm."
+      },
+      "title-page": {
+        "displayName": "Page title",
+        "purpose": "Task note titles, dashboard greeting, auth and profile headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Panel, queue, dialog and header page titles (20 to 24px)."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Register counts, tabular."
+      },
+      "quote": {
+        "displayName": "Quote",
+        "purpose": "Italic submission notes, rejection reasons and trail quotes in curly quotes."
+      },
+      "engraved": {
+        "displayName": "Engraved caps",
+        "purpose": "Wordmark, landing station verbs, role names; uppercase at 0.06em."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Landing intro paragraphs."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default text, inputs, task briefs."
+      },
+      "body-sm": {
+        "displayName": "Body small",
+        "purpose": "Nav items, panel copy, table cells, menus."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Secondary lines, hints, captions; field labels at 600."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "All .btn labels."
+      },
+      "label": {
+        "displayName": "Label (.caps)",
+        "purpose": "Uppercase field terms, table heads, group names, badges. Never above a heading."
+      },
+      "serial": {
+        "displayName": "Serial",
+        "purpose": "Six-digit red task numbers after a caps No."
+      }
+    },
+    "shadows": [
+      {
+        "name": "frame-drop",
+        "value": "inset 0 0 0 3px var(--paper-raised), inset 0 0 0 4px var(--line), 0 10px 28px -18px rgb(var(--shadow-color) / 0.35)",
+        "purpose": "The .frame double engraved rule and soft drop; one per screen."
+      },
+      {
+        "name": "menu",
+        "value": "0 16px 40px -16px rgb(var(--shadow-color) / 0.4)",
+        "purpose": "User menu."
+      },
+      {
+        "name": "popover",
+        "value": "0 20px 50px -20px rgb(var(--shadow-color) / 0.45)",
+        "purpose": "Notifications menu."
+      },
+      {
+        "name": "dialog",
+        "value": "0 24px 60px -20px rgb(var(--shadow-color) / 0.5)",
+        "purpose": "Modal panels over an ink scrim at 40%."
+      },
+      {
+        "name": "rail-peek",
+        "value": "18px 0 44px -18px rgb(var(--shadow-color) / 0.4)",
+        "purpose": "Folded sidebar peeking open over the page."
+      },
+      {
+        "name": "drawer",
+        "value": "12px 0 40px -12px rgb(var(--shadow-color) / 0.35)",
+        "purpose": "Open mobile drawer."
+      },
+      {
+        "name": "rail-tab",
+        "value": "0 6px 16px -8px rgb(var(--shadow-color) / 0.45)",
+        "purpose": "Sidebar fold handle."
+      },
+      {
+        "name": "focus-input",
+        "value": "0 0 0 3px color-mix(in oklab, var(--note-ink) 22%, transparent)",
+        "purpose": "Input focus ring with a --note-ink border."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "House curve for every transition and animation."
+      },
+      {
+        "name": "theme-wash",
+        "value": "760ms cubic-bezier(0.65, 0, 0.35, 1)",
+        "purpose": "View Transition mask wiping the new theme in along 118deg."
+      },
+      {
+        "name": "control",
+        "value": "160ms",
+        "purpose": "Button and input colour/border transitions; press is 120ms, 1px down."
+      },
+      {
+        "name": "rise",
+        "value": "420ms, 6px, stagger 40ms",
+        "purpose": "List rows, Register cells, trail entries."
+      },
+      {
+        "name": "page-enter",
+        "value": "460ms",
+        "purpose": "Each route's content settling in."
+      },
+      {
+        "name": "rosette-draw",
+        "value": "2.4s, stagger 90ms",
+        "purpose": "Rosette strokes drawing in."
+      },
+      {
+        "name": "seal-press",
+        "value": "520ms, scale 1.12 to 1",
+        "purpose": "Seal printing on an approval made this session."
+      },
+      {
+        "name": "stamp",
+        "value": "520ms, scale 1.35 and -6deg to rest",
+        "purpose": "Status badge re-stamping on change."
+      },
+      {
+        "name": "pop",
+        "value": "420ms",
+        "purpose": "Unread count changes."
+      },
+      {
+        "name": "dialog",
+        "value": "220ms fade backdrop, 360ms settle panel",
+        "purpose": "Modals."
+      },
+      {
+        "name": "menu-unfold",
+        "value": "200ms from top right",
+        "purpose": "Menus and popovers."
+      },
+      {
+        "name": "nudge",
+        "value": "220ms, 3px",
+        "purpose": "Rows and arrows move toward their target on group hover."
+      },
+      {
+        "name": "lathe",
+        "value": "160s linear infinite; hover 900ms to 60deg",
+        "purpose": "Hero rosettes turning; mark rosettes on hover."
+      },
+      {
+        "name": "sidebar-fold",
+        "value": "460ms width; labels 260ms fade, 460ms rotateY(-70deg)",
+        "purpose": "Rail fold; peek opens after 160ms, closes after 240ms."
+      },
+      {
+        "name": "count-up",
+        "value": "700ms cubic ease-out",
+        "purpose": "CountUp from zero; final value is rendered first."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media (prefers-reduced-motion: no-preference)",
+        "purpose": "Every named animation lives inside this query."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px",
+        "purpose": "Desktop sidebar (240px, folds to 72px); below it a 256px drawer."
+      },
+      {
+        "name": "xl",
+        "value": "1280px",
+        "purpose": "Dashboard aside column (340px)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Charcoal fill for the one main act per view.",
+      "html": "<button class=\"ds-btn-primary\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8S41,67.55,40.8,77.31c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82Zm-11.55,39.29c-4.79,5-9.75,10.17-12.38,16.52-2.52,6.1-2.63,13.07-2.73,19.82-.1,7-.21,14.33-3.32,17.43s-10.39,3.22-17.43,3.32c-6.75.1-13.72.21-19.82,2.73-6.35,2.63-11.52,7.59-16.52,12.38S132,224,128,224s-9.15-4.92-14.11-9.69-10.17-9.75-16.52-12.38c-6.1-2.52-13.07-2.63-19.82-2.73-7-.1-14.33-.21-17.43-3.32s-3.22-10.39-3.32-17.43c-.1-6.75-.21-13.72-2.73-19.82-2.63-6.35-7.59-11.52-12.38-16.52S32,132,32,128s4.92-9.15,9.69-14.11,9.75-10.17,12.38-16.52c2.52-6.1,2.63-13.07,2.73-19.82.1-7,.21-14.33,3.32-17.43S70.51,56.9,77.55,56.8c6.75-.1,13.72-.21,19.82-2.73,6.35-2.63,11.52-7.59,16.52-12.38S124,32,128,32s9.15,4.92,14.11,9.69,10.17,9.75,16.52,12.38c6.1,2.52,13.07,2.63,19.82,2.73,7,.1,14.33.21,17.43,3.32s3.22,10.39,3.32,17.43c.1,6.75.21,13.72,2.73,19.82,2.63,6.35,7.59,11.52,12.38,16.52S224,124,224,128,219.08,137.15,214.31,142.11ZM173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34Z\"/></svg>Approve and countersign</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:2.5rem;padding:0 1rem;border-radius:2px;border:1px solid transparent;font-family:var(--font-archivo),system-ui,sans-serif;font-size:14px;font-weight:600;letter-spacing:0.01em;white-space:nowrap;cursor:pointer;transition:background-color 160ms cubic-bezier(0.16,1,0.3,1),border-color 160ms cubic-bezier(0.16,1,0.3,1),color 160ms cubic-bezier(0.16,1,0.3,1),transform 120ms cubic-bezier(0.16,1,0.3,1);background:var(--note);color:var(--on-note);}.ds-btn-primary:hover{background:var(--note-deep);}.ds-btn-primary:active{transform:translateY(1px);}.ds-btn-primary:focus-visible{outline:2px solid var(--note-ink);outline-offset:2px;}.ds-btn-primary:disabled{opacity:0.55;cursor:not-allowed;}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Raised sheet with a strong rule; Cancel, Edit task, Create an account.",
+      "html": "<button class=\"ds-btn-secondary\">Cancel</button>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:2.5rem;padding:0 1rem;border-radius:2px;border:1px solid transparent;font-family:var(--font-archivo),system-ui,sans-serif;font-size:14px;font-weight:600;letter-spacing:0.01em;white-space:nowrap;cursor:pointer;transition:background-color 160ms cubic-bezier(0.16,1,0.3,1),border-color 160ms cubic-bezier(0.16,1,0.3,1),color 160ms cubic-bezier(0.16,1,0.3,1),transform 120ms cubic-bezier(0.16,1,0.3,1);background:var(--paper-raised);color:var(--ink);border-color:var(--line-strong);}.ds-btn-secondary:hover{background:var(--paper-sunk);}.ds-btn-secondary:active{transform:translateY(1px);}.ds-btn-secondary:focus-visible{outline:2px solid var(--note-ink);outline-offset:2px;}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Quiet action and 36px icon buttons in the header.",
+      "html": "<button class=\"ds-btn-ghost\">Mark all as read</button>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:2.5rem;padding:0 1rem;border-radius:2px;border:1px solid transparent;font-family:var(--font-archivo),system-ui,sans-serif;font-size:14px;font-weight:600;letter-spacing:0.01em;white-space:nowrap;cursor:pointer;transition:background-color 160ms cubic-bezier(0.16,1,0.3,1),border-color 160ms cubic-bezier(0.16,1,0.3,1),color 160ms cubic-bezier(0.16,1,0.3,1),transform 120ms cubic-bezier(0.16,1,0.3,1);background:transparent;color:var(--ink-2);}.ds-btn-ghost:hover{background:var(--paper-sunk);color:var(--ink);}.ds-btn-ghost:focus-visible{outline:2px solid var(--note-ink);outline-offset:2px;}"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Outline numbering red that fills only on hover or focus.",
+      "html": "<button class=\"ds-btn-danger\">Reject with reason</button>",
+      "css": ".ds-btn-danger{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:2.5rem;padding:0 1rem;border-radius:2px;border:1px solid transparent;font-family:var(--font-archivo),system-ui,sans-serif;font-size:14px;font-weight:600;letter-spacing:0.01em;white-space:nowrap;cursor:pointer;transition:background-color 160ms cubic-bezier(0.16,1,0.3,1),border-color 160ms cubic-bezier(0.16,1,0.3,1),color 160ms cubic-bezier(0.16,1,0.3,1),transform 120ms cubic-bezier(0.16,1,0.3,1);background:transparent;color:var(--serial);border-color:color-mix(in oklab,var(--serial) 55%,transparent);}.ds-btn-danger:hover,.ds-btn-danger:focus-visible{background:var(--serial-fill);border-color:var(--serial-fill);color:#fff;}.ds-btn-danger:focus-visible{outline:2px solid var(--note-ink);outline-offset:2px;}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Raised sheet, strong rule, charcoal focus ring.",
+      "html": "<label class=\"ds-field-label\" for=\"ds-in\">Reason <span>(required)</span></label><input id=\"ds-in\" class=\"ds-input\" placeholder=\"What should change\">",
+      "css": ".ds-field-label{display:block;margin-bottom:0.375rem;font-family:var(--font-archivo),system-ui,sans-serif;font-size:13px;font-weight:600;color:var(--ink);}.ds-field-label span{font-weight:400;color:var(--ink-3);}.ds-input{width:100%;min-height:2.5rem;padding:0.5rem 0.75rem;border-radius:2px;border:1px solid var(--line-strong);background:var(--paper-raised);color:var(--ink);font-family:var(--font-archivo),system-ui,sans-serif;font-size:15px;transition:border-color 160ms cubic-bezier(0.16,1,0.3,1),box-shadow 160ms cubic-bezier(0.16,1,0.3,1);}.ds-input::placeholder{color:var(--ink-3);}.ds-input:hover{border-color:var(--ink-3);}.ds-input:focus{outline:none;border-color:var(--note-ink);box-shadow:0 0 0 3px color-mix(in oklab,var(--note-ink) 22%,transparent);}"
+    },
+    {
+      "name": "Status Overprints",
+      "kind": "chip",
+      "refersTo": "status-submitted",
+      "description": "Square small-cap badges, one ink per state; bronze only for Submitted.",
+      "html": "<span class=\"ds-badge ds-pending\">Pending</span> <span class=\"ds-badge ds-submitted\">Submitted</span> <span class=\"ds-badge ds-approved\">Approved</span> <span class=\"ds-badge ds-rejected\">Rejected</span>",
+      "css": ".ds-badge{font-family:var(--font-archivo),system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;font-stretch:88%;display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:2px;border:1px solid;}.ds-pending{color:var(--ink-2);border-color:var(--line-strong);background:var(--paper-sunk);}.ds-submitted{color:var(--seal-ink);border-color:var(--seal);background:var(--seal-tint);}.ds-approved{color:var(--ok);border-color:color-mix(in oklab,var(--ok) 60%,transparent);background:var(--ok-tint);}.ds-rejected{color:var(--serial);border-color:color-mix(in oklab,var(--serial) 60%,transparent);background:var(--serial-tint);}"
+    },
+    {
+      "name": "Role Badges",
+      "kind": "chip",
+      "refersTo": "role-admin",
+      "description": "Authority as ink weight: solid stamp, charcoal tint, neutral paper.",
+      "html": "<span class=\"ds-role ds-admin\">Admin</span> <span class=\"ds-role ds-manager\">Manager</span> <span class=\"ds-role ds-employee\">Employee</span>",
+      "css": ".ds-role{font-family:var(--font-archivo),system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;font-stretch:88%;display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:2px;border:1px solid;}.ds-admin{color:var(--on-note);border-color:var(--note);background:var(--note);}.ds-manager{color:var(--note-ink);border-color:color-mix(in oklab,var(--note-ink) 60%,transparent);background:var(--note-tint);}.ds-employee{color:var(--ink-2);border-color:var(--line-strong);background:var(--paper-sunk);}"
+    },
+    {
+      "name": "Priority Weight Marks",
+      "kind": "chip",
+      "refersTo": "status-rejected",
+      "description": "Three 2px engraved bars; only High is coloured.",
+      "html": "<span class=\"ds-prio ds-high\"><span class=\"ds-bars\"><i></i><i></i><i></i></span>High</span> <span class=\"ds-prio ds-med\"><span class=\"ds-bars\"><i class=\"off\"></i><i></i><i></i></span>Medium</span> <span class=\"ds-prio ds-low\"><span class=\"ds-bars\"><i class=\"off\"></i><i class=\"off\"></i><i></i></span>Low</span>",
+      "css": ".ds-prio{font-family:var(--font-archivo),system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;font-stretch:88%;display:inline-flex;align-items:center;gap:6px;margin-right:12px;}.ds-bars{display:inline-flex;flex-direction:column;gap:2px;}.ds-bars i{display:block;height:2px;width:12px;background:currentColor;}.ds-bars i.off{opacity:0.2;}.ds-high{color:var(--serial);}.ds-med{color:var(--ink-2);}.ds-low{color:var(--ink-3);}"
+    },
+    {
+      "name": "Banknote Frame",
+      "kind": "card",
+      "refersTo": "frame",
+      "description": "The one primary instrument per screen: double engraved rule, square corners.",
+      "html": "<article class=\"ds-frame\"><div class=\"ds-serial\"><span>No.</span>000124</div><h2 class=\"ds-frame-title\">Office lease amendment review</h2><p class=\"ds-frame-meta\">Assigned to Tomás Lindqvist</p></article>",
+      "css": ".ds-frame{background:var(--paper-raised);border:1px solid var(--line-strong);box-shadow:inset 0 0 0 3px var(--paper-raised),inset 0 0 0 4px var(--line),0 10px 28px -18px rgb(var(--shadow-color) / 0.35);padding:28px 36px;}.ds-serial{display:inline-flex;align-items:baseline;gap:4px;font-family:var(--font-azeret),monospace;font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--serial);}.ds-serial span{font-family:var(--font-archivo),system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;font-stretch:88%;font-size:10px;color:var(--ink-3);}.ds-frame-title{margin:16px 0 0;font-family:var(--font-bodoni),serif;font-variation-settings:\"opsz\" 11;font-weight:400;font-size:30px;line-height:1.12;color:var(--ink);}.ds-frame-meta{margin:8px 0 0;font-family:var(--font-archivo),system-ui,sans-serif;font-size:14px;color:var(--ink-3);}"
+    },
+    {
+      "name": "Sidebar Nav Item",
+      "kind": "nav",
+      "refersTo": "nav-item-active",
+      "description": "Charcoal tint and inset ring when active; paper-sunk on hover.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-item is-active\" aria-current=\"page\" href=\"#\">Dashboard</a><a class=\"ds-nav-item\" href=\"#\">Tasks</a><a class=\"ds-nav-item\" href=\"#\">Notifications</a></nav>",
+      "css": ".ds-nav{display:flex;flex-direction:column;gap:2px;width:212px;padding:12px;background:var(--paper-raised);border-right:1px solid var(--line);}.ds-nav-item{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:2px;font-family:var(--font-archivo),system-ui,sans-serif;font-size:14px;color:var(--ink-2);text-decoration:none;transition:background-color 150ms,color 150ms;}.ds-nav-item:hover{background:var(--paper-sunk);color:var(--ink);}.ds-nav-item:focus-visible{outline:2px solid var(--note-ink);outline-offset:2px;}.ds-nav-item.is-active{background:var(--note-tint);color:var(--note-ink);font-weight:600;box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--note-ink) 22%,transparent);}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Treasury Note",
+    "overview": "Every task in Countersign is treated as a note of value: it is numbered, engraved, and countersigned. The interface is printed on neutral grey security paper in charcoal intaglio ink. Three special inks are held back for meaning: bronze foil for seals and work awaiting a countersignature, green for approval, and numbering red for serials and anything that went wrong. Structure comes from engraved rules and hairlines rather than from cards, tinted tiles, or pill badges. The deliberate rejection, written into the direction contract, is the slate-card SaaS dashboard of stat tiles and pill badges.\n\nThe density is that of a well-kept register. Rows are compact, figures are tabular, labels are small caps, and headings are set in Bodoni Moda as if engraved. Ornament is generated rather than drawn: every brand surface, empty state and seal uses a guilloche rosette computed from a seed (a task id, a user id, a constant), so a task's seal belongs to that task alone. Motion is printing motion: rosette lines draw in, seals press, statuses stamp, and the theme washes across the page along the hatching angle (118deg), all of it only when the viewer has not asked for reduced motion.\n\nLight and dark are one system. Every colour token is a single `light-dark()` declaration. `html[data-theme]` pins light or dark, and when it is absent the OS decides. In dark mode the charcoal ink inverts to pale paper-white ink, so primary buttons become light on dark rather than taking on a new hue.",
+    "keyCharacteristics": [
+      "Neutral grey paper grounds (never cream) with charcoal ink for text and primary actions.",
+      "Bronze, green and red are status inks with fixed meanings, never decoration.",
+      "One corner language: 2px, square-feeling frames, circles only for avatars, seals and counts.",
+      "Bodoni Moda engraved display, Archivo text with a narrowed width for caps, Azeret Mono serials.",
+      "Generated guilloche rosettes and seals instead of illustration or icon art.",
+      "Printing motion (draw, press, stamp, wash), always behind `prefers-reduced-motion: no-preference`."
+    ],
+    "rules": [
+      {
+        "name": "The Reserved Ink Rule",
+        "body": "Bronze means \"a seal\" or \"submitted, awaiting countersignature\", and nothing else. That excludes roles, priority, links and decoration. Green means \"approved, active, or done\". Numbering red means \"a serial, overdue, rejected, High priority, an error, destructive, or unread\". Nothing else may use these three families, and no fourth accent exists.",
+        "section": "colors"
+      },
+      {
+        "name": "The Authority Is Ink Weight Rule",
+        "body": "Rank is shown by how much charcoal is printed, not by hue. Admin is a solid ink stamp, Manager is a charcoal tint, and Employee is neutral paper. Priority works the same way: High is the only priority in colour (red), Medium is `--ink-2`, and Low is `--ink-3`.",
+        "section": "colors"
+      },
+      {
+        "name": "The Grey Paper Rule",
+        "body": "Grounds are neutral grey with no warm cast. Do not tint the paper toward cream or ivory. Warmth belongs to the bronze foil alone.",
+        "section": "colors"
+      },
+      {
+        "name": "The Charcoal Action Rule",
+        "body": "Primary actions are charcoal (`--note`), never bronze or red. In dark mode they invert to pale ink on a dark ground.",
+        "section": "colors"
+      },
+      {
+        "name": "The Caps Are Labels Rule",
+        "body": "`.caps` names a field, a column or a group. It is never set above a heading as an eyebrow or kicker. A heading stands alone.",
+        "section": "typography"
+      },
+      {
+        "name": "The Engraved Voice Rule",
+        "body": "Bodoni carries headings, figures and quotations. Archivo carries everything a user reads in order to act. Never set body copy or buttons in Bodoni.",
+        "section": "typography"
+      },
+      {
+        "name": "The Plain Punctuation Rule",
+        "body": "UI copy uses no em or en dashes. Use commas, periods, or \"by\". Loading copy ends in three periods (\"Submitting...\"). Dates read \"12 Oct 2026\" (en-GB).",
+        "section": "typography"
+      },
+      {
+        "name": "The Queue Owns the Column Rule",
+        "body": "On the dashboard, the countersign queue (or \"Waiting on you\" for employees) is the first frame in the main column. Summary counts live in one Register strip above it, never as a row of stat cards.",
+        "section": "layout"
+      },
+      {
+        "name": "The Fixed Spine Rule",
+        "body": "Sidebar icons sit at a fixed x (rail centre 36px) in both states, so folding narrows the panel around them rather than reflowing the nav.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Sheet Rule",
+        "body": "Panels, badges, buttons and inputs carry no shadow at rest or on hover. Shadow is reserved for the frame's engraved drop and for layers that float.",
+        "section": "elevation"
+      },
+      {
+        "name": "The One Frame Rule",
+        "body": "A screen gets one `.frame` for its primary instrument (the queue, the note, the form). Everything secondary is a `.panel`.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Two Pixel Rule",
+        "body": "Every corner is 2px or square. Never introduce 4px, 8px or pill radii. If something looks like it wants a pill, it wants a 2px overprint badge instead.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Circle Means Round Rule",
+        "body": "`rounded-full` is only for avatars, seals, rosettes and counts.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** take every colour from a token (`bg-paper-raised`, `text-ink-3`, `border-line-strong`) so both themes stay correct. Every token is one `light-dark()` pair.",
+      "**Do** use charcoal (`.btn-primary`, `--note`) for the primary action, and only one per view.",
+      "**Do** keep bronze for seals and the Submitted state only (badge, notification icon, submission marks on the trail). Keep green for approved, active and success. Keep numbering red for serials, overdue, rejection, High priority, errors, destructive actions and the unread count.",
+      "**Do** use 2px corners (`rounded-sm`), and `rounded-full` only for avatars, seals, rosettes and counts.",
+      "**Do** put a screen's primary instrument in one `.frame` and everything secondary in `.panel`.",
+      "**Do** set headings, figures and quotations in Bodoni (`font-display`, `.engraved`), and set everything actionable in Archivo.",
+      "**Do** use `.caps` for field terms, table heads and group names, and `tabular` for every number and date.",
+      "**Do** use Phosphor icons (`@phosphor-icons/react`), regular weight by default, fill for the active nav item and the open bell, and bold for 12–14px carets and arrows.",
+      "**Do** use a seeded `Rosette` for ornament and empty states. Seed it with the entity id so it stays stable.",
+      "**Do** wrap every new animation in `@media (prefers-reduced-motion: no-preference)` (or `motion-safe:`), and render final values first, as `CountUp` does.",
+      "**Do** write copy without em or en dashes, with curly quotes around quoted notes, and with dates as \"12 Oct 2026\"."
+    ],
+    "donts": [
+      "**Don't** build stat-tile rows, slate cards or pill badges. Counts go in the Register strip, and states go in square overprint badges.",
+      "**Don't** tint the paper cream or ivory, and don't add a fourth accent hue.",
+      "**Don't** use bronze or red for primary buttons, links, roles or decoration, and don't use bronze for any priority.",
+      "**Don't** use radii above 2px or pill shapes on rectangular elements.",
+      "**Don't** put eyebrow or kicker text above a heading.",
+      "**Don't** hand-draw icon SVG or import another icon set. Rosettes and seals are generated artwork, not icons.",
+      "**Don't** add shadows to panels, badges, buttons or inputs. Shadow belongs to the frame and to floating layers.",
+      "**Don't** ship ungated keyframe animation. The global reduced-motion rule covers transitions and `animate-pulse` only; any new decorative `@keyframes` belongs inside the `no-preference` block or behind `motion-safe:`.",
+      "**Don't** press the seal on every visit. It prints only when the approval happens in the current session.",
+      "**Don't** leave an enabled control without `cursor: pointer` or a disabled one without `not-allowed`."
+    ]
+  }
+}
