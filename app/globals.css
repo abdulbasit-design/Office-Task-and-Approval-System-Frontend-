@@ -146,6 +146,19 @@ time,
   font-variant-numeric: tabular-nums lining-nums;
 }
 
+/* Tailwind v4 resets buttons to the default cursor; every live control gets the hand */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+select:not(:disabled),
+summary,
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 input::placeholder,
 textarea::placeholder {
   color: var(--ink-3);
