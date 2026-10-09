@@ -311,10 +311,6 @@ textarea::placeholder {
     opacity: 1;
     transition-delay: 160ms;
   }
-  @media (prefers-reduced-motion: reduce) {
-    .fold-label,
-    .fold-rule { transition: none; }
-  }
 
   .field-error { margin-top: 0.375rem; font-size: 13px; color: var(--serial); }
   .field-hint { margin-top: 0.375rem; font-size: 13px; color: var(--ink-3); }
@@ -372,6 +368,13 @@ textarea::placeholder {
 
 @keyframes draw-x {
   from { transform: scaleX(0); }
+}
+
+/* Reduced motion: transitions resolve at once and skeletons hold still.
+   Spinners keep turning; they report progress rather than decorate. */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { transition-duration: 0s !important; transition-delay: 0s !important; }
+  .animate-pulse { animation: none; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
