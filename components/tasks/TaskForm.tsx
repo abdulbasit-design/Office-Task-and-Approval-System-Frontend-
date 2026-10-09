@@ -5,6 +5,8 @@ import { WarningCircle } from "@phosphor-icons/react";
 import type { TaskCreate, TaskUpdate, TaskResponse } from "@/lib/api/taskApi";
 import { useGetUsersQuery } from "@/lib/api/userApi";
 import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
+import Segmented from "@/components/ui/Segmented";
+import { PriorityBars } from "./TaskStatusBadge";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -261,17 +263,18 @@ export default function TaskForm({
         </Field>
 
         <Field id="task-priority" label="Priority" required error={errors.priority}>
-          <select
-            id="task-priority"
+          <Segmented
+            label="Priority"
             value={priority}
-            onChange={(e) => setPriority(e.target.value as "LOW" | "MEDIUM" | "HIGH")}
-            className="input"
-            disabled={isLoading}
-          >
-            <option value="LOW">Low</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="HIGH">High</option>
-          </select>
+            onChange={setPriority}
+            className="grid grid-cols-3 gap-1 rounded-sm border border-line-strong bg-paper-raised p-1"
+            buttonClassName="min-h-8 justify-center px-2"
+            options={(["LOW", "MEDIUM", "HIGH"] as const).map((p) => ({
+              value: p,
+              label: p.charAt(0) + p.slice(1).toLowerCase(),
+              icon: <PriorityBars priority={p} />,
+            }))}
+          />
         </Field>
       </div>
 

@@ -6,6 +6,7 @@ interface Option<T extends string> {
   value: T;
   label: string;
   count?: number;
+  icon?: React.ReactNode;
 }
 
 /**
@@ -19,12 +20,17 @@ export default function Segmented<T extends string>({
   value,
   onChange,
   showCounts = true,
+  className = "flex flex-wrap gap-1",
+  buttonClassName = "min-h-9 px-3",
 }: {
   label: string;
   options: Option<T>[];
   value: T;
   onChange: (value: T) => void;
   showCounts?: boolean;
+  /** Layout of the group, e.g. a grid for full-width choices */
+  className?: string;
+  buttonClassName?: string;
 }) {
   const groupRef = useRef<HTMLDivElement>(null);
   const plateRef = useRef<HTMLSpanElement>(null);
@@ -60,7 +66,7 @@ export default function Segmented<T extends string>({
   }, [value]);
 
   return (
-    <div ref={groupRef} role="group" aria-label={label} className="relative isolate flex flex-wrap gap-1">
+    <div ref={groupRef} role="group" aria-label={label} className={`relative isolate ${className}`}>
       <span
         ref={plateRef}
         aria-hidden="true"
@@ -74,10 +80,11 @@ export default function Segmented<T extends string>({
             type="button"
             aria-pressed={active}
             onClick={() => onChange(o.value)}
-            className={`btn min-h-9 gap-2 px-3 text-[14px] ${
+            className={`btn gap-2 text-[14px] ${buttonClassName} ${
               active ? "text-note-ink" : "text-ink-2 hover:bg-paper-sunk hover:text-ink"
             }`}
           >
+            {o.icon}
             {o.label}
             {showCounts && o.count !== undefined && (
               <span className={`font-display text-[16px] leading-none tabular transition-colors ${active ? "" : "text-ink-3"}`}>

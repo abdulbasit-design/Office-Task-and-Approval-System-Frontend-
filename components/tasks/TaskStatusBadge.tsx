@@ -28,16 +28,24 @@ export function StatusBadge({ status }: { status: Status }) {
   );
 }
 
+/** The weight marks alone: three stacked rules, the unused ones faint. Takes its colour from the priority. */
+export function PriorityBars({ priority }: { priority: Priority }) {
+  const cfg = PRIORITY_CONFIG[priority] ?? PRIORITY_CONFIG.MEDIUM;
+  return (
+    <span className={`inline-flex flex-col gap-[2px] ${cfg.className}`} aria-hidden="true">
+      {[3, 2, 1].map((n) => (
+        <span key={n} className={`block h-[2px] w-3 bg-current ${n > cfg.bars ? "opacity-20" : ""}`} />
+      ))}
+    </span>
+  );
+}
+
 /** Priority as engraved weight marks: one, two or three rules. */
 export function PriorityBadge({ priority }: { priority: Priority }) {
   const cfg = PRIORITY_CONFIG[priority] ?? PRIORITY_CONFIG.MEDIUM;
   return (
     <span className={`caps inline-flex items-center gap-1.5 ${cfg.className}`}>
-      <span className="inline-flex flex-col gap-[2px]" aria-hidden="true">
-        {[3, 2, 1].map((n) => (
-          <span key={n} className={`block h-[2px] w-3 bg-current ${n > cfg.bars ? "opacity-20" : ""}`} />
-        ))}
-      </span>
+      <PriorityBars priority={priority} />
       {cfg.label}
     </span>
   );
