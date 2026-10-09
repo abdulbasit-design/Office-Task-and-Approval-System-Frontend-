@@ -19,7 +19,7 @@ import Serial from "@/components/ui/Serial";
 import { formatDate, formatDateTime } from "@/lib/format";
 
 // Backend type string to icon and ink. Bronze marks the countersign trail only.
-function getTypeMeta(type: string): { icon: Icon; tone: string } {
+export function getTypeMeta(type: string): { icon: Icon; tone: string } {
   switch (type) {
     case "TASK_APPROVED":
       return { icon: SealCheck, tone: "text-seal" };
@@ -35,7 +35,7 @@ function getTypeMeta(type: string): { icon: Icon; tone: string } {
   }
 }
 
-function formatRelativeTime(iso: string): string {
+export function formatRelativeTime(iso: string): string {
   try {
     const now = Date.now();
     const then = new Date(iso).getTime();

@@ -3,11 +3,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { Bell, CaretDown, List, SignOut, UserCircle } from "@phosphor-icons/react";
+import { CaretDown, List, SignOut, UserCircle } from "@phosphor-icons/react";
 import { clearAccessToken } from "@/lib/slices/authSlice";
 import { useLogoutMutation, useGetMeQuery } from "@/lib/api/authApi";
 import { apiSlice, clearProactiveTimer } from "@/lib/api/apiSlice";
-import NotificationBadge from "@/components/notifications/NotificationBadge";
+import NotificationsMenu from "@/components/notifications/NotificationsMenu";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const PAGE_TITLES: Record<string, string> = {
@@ -109,15 +109,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
         <div className="flex shrink-0 items-center gap-1">
           <ThemeToggle />
 
-          <button
-            id="notification-bell-button"
-            aria-label="View notifications"
-            onClick={() => router.push("/notifications")}
-            className="btn btn-ghost relative w-9 min-h-9 px-0"
-          >
-            <Bell size={19} />
-            <NotificationBadge />
-          </button>
+          <NotificationsMenu />
 
           <div className="relative ml-1" ref={dropdownRef}>
             <button
