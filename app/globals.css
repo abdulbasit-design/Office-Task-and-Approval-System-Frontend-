@@ -289,7 +289,61 @@ textarea::placeholder {
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--note-ink) 22%, transparent);
   }
   .input[aria-invalid="true"] { border-color: var(--serial); }
-  .input:disabled { background: var(--paper-sunk); color: var(--ink-3); cursor: not-allowed; }
+  .input:disabled { background-color: var(--paper-sunk); color: var(--ink-3); cursor: not-allowed; }
+
+  /* Selects: a quiet engraved caret everywhere. Where the browser supports a
+     customizable select, the option list is drawn as one of our menus too:
+     same sheet, border and shadow, a flipping caret, ink-marked selection. */
+  select.input {
+    --caret: var(--ink-3);
+    --caret-image:
+      linear-gradient(45deg, transparent 50%, var(--caret) 50%),
+      linear-gradient(135deg, var(--caret) 50%, transparent 50%);
+    appearance: none;
+    padding-right: 2.25rem;
+    background-image: var(--caret-image);
+    background-position: calc(100% - 17px) calc(50% + 1px), calc(100% - 12px) calc(50% + 1px);
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+  }
+  @supports (appearance: base-select) {
+    select.input,
+    select.input::picker(select) { appearance: base-select; }
+    select.input { padding-right: 0.75rem; background-image: none; gap: 0.5rem; }
+    /* Same thin caret as the fallback, so every browser draws one shape */
+    select.input::picker-icon {
+      content: "";
+      width: 10px;
+      height: 6px;
+      align-self: center;
+      background-image: var(--caret-image);
+      background-size: 5px 5px;
+      background-position: 0 0, 5px 0;
+      background-repeat: no-repeat;
+    }
+    select.input:open { --caret: var(--ink); border-color: var(--note-ink); }
+    select.input:open::picker-icon { rotate: 180deg; }
+    select.input::picker(select) {
+      margin-block: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--paper-raised);
+      color: var(--ink);
+      box-shadow: 0 16px 40px -16px rgb(var(--shadow-color) / 0.4);
+    }
+    select.input option {
+      padding: 0.5rem 0.625rem;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--ink-2);
+      cursor: pointer;
+    }
+    select.input option:hover,
+    select.input option:focus-visible { background: var(--paper-sunk); color: var(--ink); outline: none; }
+    select.input option:checked { color: var(--ink); font-weight: 600; }
+    select.input option::checkmark { color: var(--note-ink); }
+  }
 
   /* Rail labels fold back toward the spine like a note creasing, then return */
   .fold-label {
@@ -391,6 +445,22 @@ textarea::placeholder {
   .rise { animation: rise 420ms var(--ease-out-expo) both; animation-delay: calc(var(--i, 0) * 40ms); }
   .icon-turn { animation: icon-turn 480ms var(--ease-out-expo) both; }
   .refresh-turn { animation: refresh-turn 900ms cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+
+  /* Select lists unfold like the other menus; the caret turns as they open */
+  @supports (appearance: base-select) {
+    select.input::picker-icon { transition: rotate 220ms var(--ease-out-expo); }
+    select.input::picker(select) {
+      transition:
+        opacity 160ms ease-out,
+        translate 220ms var(--ease-out-expo),
+        overlay 220ms allow-discrete,
+        display 220ms allow-discrete;
+    }
+    select.input:not(:open)::picker(select) { opacity: 0; translate: 0 -4px; }
+    @starting-style {
+      select.input:open::picker(select) { opacity: 0; translate: 0 -4px; }
+    }
+  }
 
   /* Each route's content settles in */
   .page-enter { animation: rise 460ms var(--ease-out-expo) both; }
