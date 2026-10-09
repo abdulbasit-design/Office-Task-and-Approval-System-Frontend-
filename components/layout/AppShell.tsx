@@ -27,7 +27,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden bg-paper">
       {/* ── Sidebar ──────────────────────────────────────────────── */}
       <Sidebar
         mobileOpen={mobileSidebarOpen}
