@@ -47,7 +47,8 @@ export default function DashboardPage() {
           ? "Nothing is waiting on you."
           : `${open.length} task${open.length === 1 ? " is" : "s are"} waiting on you.`;
 
-  const firstName = me?.full_name?.split(" ")[0];
+  // First two words of the name: "QA Manager", "Amara Okafor", "Mary Jane" of "Mary Jane Watson"
+  const shortName = me?.full_name?.trim().split(/\s+/).slice(0, 2).join(" ");
   const today = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 
   return (
@@ -56,7 +57,7 @@ export default function DashboardPage() {
         <div>
           <h2 className="font-display text-[32px] leading-tight text-ink sm:text-[36px]">
             {greeting()}
-            {firstName ? `, ${firstName}` : ""}.
+            {shortName ? `, ${shortName}` : ""}.
           </h2>
           {!isLoading && !isError && <p className="mt-1 text-[16px] text-ink-2">{summary}</p>}
           <p className="mt-1 text-[13px] text-ink-3">{today}</p>
