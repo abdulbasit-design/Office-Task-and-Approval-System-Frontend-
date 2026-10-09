@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowClockwise, LockKey, MagnifyingGlass, Plus, WarningCircle } from "@phosphor-icons/react";
+import { LockKey, MagnifyingGlass, Plus, WarningCircle } from "@phosphor-icons/react";
+import RefreshButton from "@/components/ui/RefreshButton";
 import { useGetUsersQuery } from "@/lib/api/userApi";
 import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
 import { useGetMeQuery } from "@/lib/api/authApi";
@@ -19,6 +20,7 @@ export default function UsersPage() {
   const {
     data: users = [],
     isLoading: isUsersLoading,
+    isFetching,
     isError: isUsersError,
     error: usersError,
     refetch,
@@ -100,14 +102,7 @@ export default function UsersPage() {
         </p>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => refetch()}
-            className="btn btn-ghost w-9 min-h-9 px-0"
-            title="Refresh user list"
-            aria-label="Refresh user list"
-          >
-            <ArrowClockwise size={18} />
-          </button>
+          <RefreshButton onRefresh={refetch} fetching={isFetching} />
           <Link href="/signup" target="_blank" className="btn btn-primary">
             <Plus size={16} weight="bold" /> Register user
           </Link>

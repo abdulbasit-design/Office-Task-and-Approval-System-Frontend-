@@ -4,6 +4,7 @@ import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { MagnifyingGlass, Plus, WarningCircle } from "@phosphor-icons/react";
+import RefreshButton from "@/components/ui/RefreshButton";
 import { useGetTasksQuery } from "@/lib/api/taskApi";
 import { useGetMeQuery } from "@/lib/api/authApi";
 import TaskTable from "@/components/tasks/TaskTable";
@@ -24,7 +25,7 @@ const isStatus = (v: string | null): v is TaskResponse["status"] =>
   v === "PENDING" || v === "SUBMITTED" || v === "APPROVED" || v === "REJECTED";
 
 function TasksView({ initialStatus }: { initialStatus: StatusFilter }) {
-  const { data: tasks = [], isLoading, isError, error } = useGetTasksQuery();
+  const { data: tasks = [], isLoading, isError, error, isFetching, refetch } = useGetTasksQuery();
   const { data: me } = useGetMeQuery();
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>(initialStatus);
@@ -59,11 +60,14 @@ function TasksView({ initialStatus }: { initialStatus: StatusFilter }) {
               ? `Showing ${filtered.length} of ${tasks.length} task${tasks.length === 1 ? "" : "s"}`
               : `${tasks.length} task${tasks.length === 1 ? "" : "s"} on record`}
         </p>
-        {me?.role === "manager" && (
-          <Link href="/tasks/create" id="create-task-button" className="btn btn-primary self-start sm:self-auto">
-            <Plus size={16} weight="bold" /> New task
-          </Link>
-        )}
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <RefreshButton onRefresh={refetch} fetching={isFetching} />
+          {me?.role === "manager" && (
+            <Link href="/tasks/create" id="create-task-button" className="btn btn-primary">
+              <Plus size={16} weight="bold" /> New task
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="panel flex flex-col gap-3 p-3 lg:flex-row lg:items-center">

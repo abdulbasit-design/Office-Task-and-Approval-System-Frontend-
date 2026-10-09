@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { ArrowClockwise, Checks, CircleNotch, WarningCircle } from "@phosphor-icons/react";
+import RefreshButton from "@/components/ui/RefreshButton";
 import { useGetNotificationsQuery, useMarkNotificationReadMutation } from "@/lib/api/notificationApi";
 import type { NotificationResponse } from "@/lib/api/notificationApi";
 import NotificationItem from "@/components/notifications/NotificationItem";
@@ -157,26 +158,29 @@ export default function NotificationsPage() {
           )}
         </div>
 
-        {unreadCount > 0 && !isLoading && !isError && (
-          <button
-            id="mark-all-read-button"
-            onClick={handleMarkAllRead}
-            disabled={isMarkingAll || isFetching}
-            className="btn btn-secondary self-start sm:self-auto"
-          >
-            {isMarkingAll ? (
-              <>
-                <CircleNotch size={16} className="animate-spin" aria-hidden="true" />
-                Marking all…
-              </>
-            ) : (
-              <>
-                <Checks size={16} aria-hidden="true" />
-                Mark all as read
-              </>
-            )}
-          </button>
-        )}
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <RefreshButton onRefresh={refetch} fetching={isFetching} />
+          {unreadCount > 0 && !isLoading && !isError && (
+            <button
+              id="mark-all-read-button"
+              onClick={handleMarkAllRead}
+              disabled={isMarkingAll || isFetching}
+              className="btn btn-secondary min-h-9 px-3"
+            >
+              {isMarkingAll ? (
+                <>
+                  <CircleNotch size={16} className="animate-spin" aria-hidden="true" />
+                  Marking all…
+                </>
+              ) : (
+                <>
+                  <Checks size={16} aria-hidden="true" />
+                  Mark all as read
+                </>
+              )}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ── Mark all error ─────────────────────────────────────────────── */}
@@ -246,14 +250,6 @@ export default function NotificationsPage() {
                 <NotificationSkeleton key={i} />
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Fetching indicator: re-fetching after a mutation */}
-        {isFetching && !isLoading && (
-          <div className="flex items-center gap-2 border-b border-line px-5 py-2 text-[13px] text-ink-3">
-            <CircleNotch size={14} className="animate-spin" aria-hidden="true" />
-            <span>Updating…</span>
           </div>
         )}
 

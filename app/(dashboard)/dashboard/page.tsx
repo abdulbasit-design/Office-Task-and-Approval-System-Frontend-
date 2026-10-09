@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Plus, WarningCircle } from "@phosphor-icons/react";
+import RefreshButton from "@/components/ui/RefreshButton";
 import TaskQueue from "@/components/dashboard/TaskQueue";
 import { RecentlySealed, Register } from "@/components/dashboard/Register";
 import { useGetTasksQuery } from "@/lib/api/taskApi";
@@ -22,7 +23,7 @@ function Skeleton() {
 }
 
 export default function DashboardPage() {
-  const { data: tasks = [], isLoading, isError, error } = useGetTasksQuery();
+  const { data: tasks = [], isLoading, isError, error, isFetching, refetch } = useGetTasksQuery();
   const { data: me } = useGetMeQuery();
   const role = me?.role ?? "employee";
 
@@ -60,11 +61,14 @@ export default function DashboardPage() {
           {!isLoading && !isError && <p className="mt-1 text-[16px] text-ink-2">{summary}</p>}
           <p className="mt-1 text-[13px] text-ink-3">{today}</p>
         </div>
-        {role === "manager" && (
-          <Link href="/tasks/create" className="btn btn-primary self-start sm:self-auto">
-            <Plus size={16} weight="bold" /> New task
-          </Link>
-        )}
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <RefreshButton onRefresh={refetch} fetching={isFetching} />
+          {role === "manager" && (
+            <Link href="/tasks/create" className="btn btn-primary">
+              <Plus size={16} weight="bold" /> New task
+            </Link>
+          )}
+        </div>
       </div>
 
       {isError && (

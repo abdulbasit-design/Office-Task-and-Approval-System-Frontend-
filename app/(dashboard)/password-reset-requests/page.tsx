@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowClockwise, CheckCircle, Info, Key, LockKey, WarningCircle, X } from "@phosphor-icons/react";
+import { CheckCircle, Info, Key, LockKey, WarningCircle, X } from "@phosphor-icons/react";
+import RefreshButton from "@/components/ui/RefreshButton";
 import {
   useGetMeQuery,
   useGetPasswordResetRequestsQuery,
@@ -23,6 +24,7 @@ export default function PasswordResetRequestsPage() {
   const {
     data: requests = [],
     isLoading: isRequestsLoading,
+    isFetching,
     isError: isRequestsError,
     refetch,
   } = useGetPasswordResetRequestsQuery(undefined, {
@@ -70,10 +72,7 @@ export default function PasswordResetRequestsPage() {
               ? "No one is waiting on a password reset."
               : `${requests.length} pending request${requests.length === 1 ? "" : "s"}, oldest first.`}
         </p>
-        <button onClick={() => refetch()} className="btn btn-secondary min-h-9 shrink-0 px-3" title="Refresh requests">
-          <ArrowClockwise size={17} aria-hidden="true" />
-          Refresh
-        </button>
+        <RefreshButton onRefresh={refetch} fetching={isFetching} />
       </div>
 
       {successBanner && (

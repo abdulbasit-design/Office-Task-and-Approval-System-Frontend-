@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowClockwise, LockKey, MagnifyingGlass, Plus, WarningCircle, X } from "@phosphor-icons/react";
+import { LockKey, MagnifyingGlass, Plus, WarningCircle, X } from "@phosphor-icons/react";
+import RefreshButton from "@/components/ui/RefreshButton";
 import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
 import { useGetUsersQuery } from "@/lib/api/userApi";
 import { useGetMeQuery } from "@/lib/api/authApi";
@@ -16,6 +17,7 @@ export default function DepartmentsPage() {
   const {
     data: departments = [],
     isLoading: isDeptsLoading,
+    isFetching,
     isError: isDeptsError,
     error: deptsError,
     refetch,
@@ -109,14 +111,7 @@ export default function DepartmentsPage() {
         </p>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => refetch()}
-            className="btn btn-ghost w-9 min-h-9 px-0"
-            title="Refresh departments list"
-            aria-label="Refresh departments list"
-          >
-            <ArrowClockwise size={18} />
-          </button>
+          <RefreshButton onRefresh={refetch} fetching={isFetching} />
           <button onClick={handleOpenCreate} id="create-department-btn" className="btn btn-primary">
             <Plus size={16} weight="bold" /> New department
           </button>
