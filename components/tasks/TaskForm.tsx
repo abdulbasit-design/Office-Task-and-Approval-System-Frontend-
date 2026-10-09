@@ -5,6 +5,9 @@ import { WarningCircle } from "@phosphor-icons/react";
 import type { TaskCreate, TaskUpdate, TaskResponse } from "@/lib/api/taskApi";
 import { useGetUsersQuery } from "@/lib/api/userApi";
 import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
+import Segmented from "@/components/ui/Segmented";
+import DeadlinePicker from "./DeadlinePicker";
+import { PriorityBars } from "./TaskStatusBadge";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -245,33 +248,32 @@ export default function TaskForm({
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field id="task-deadline" label="Deadline" required error={errors.deadline}>
-          <input
+          <DeadlinePicker
             id="task-deadline"
-            type="datetime-local"
             value={deadline}
-            onChange={(e) => {
-              setDeadline(e.target.value);
+            onChange={(v) => {
+              setDeadline(v);
               if (errors.deadline) setErrors((p) => ({ ...p, deadline: undefined }));
             }}
-            className="input tabular"
-            aria-invalid={errors.deadline ? true : undefined}
-            aria-describedby={described("task-deadline", errors.deadline)}
+            invalid={Boolean(errors.deadline)}
+            describedBy={described("task-deadline", errors.deadline)}
             disabled={isLoading}
           />
         </Field>
 
         <Field id="task-priority" label="Priority" required error={errors.priority}>
-          <select
-            id="task-priority"
+          <Segmented
+            label="Priority"
             value={priority}
-            onChange={(e) => setPriority(e.target.value as "LOW" | "MEDIUM" | "HIGH")}
-            className="input"
-            disabled={isLoading}
-          >
-            <option value="LOW">Low</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="HIGH">High</option>
-          </select>
+            onChange={setPriority}
+            className="grid grid-cols-3 gap-1 rounded-sm border border-line-strong bg-paper-raised p-1"
+            buttonClassName="min-h-8 justify-center px-2"
+            options={(["LOW", "MEDIUM", "HIGH"] as const).map((p) => ({
+              value: p,
+              label: p.charAt(0) + p.slice(1).toLowerCase(),
+              icon: <PriorityBars priority={p} />,
+            }))}
+          />
         </Field>
       </div>
 
