@@ -103,7 +103,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
           >
             <List size={20} />
           </button>
-          <h1 className="truncate font-display text-[24px] leading-none text-ink">{pageTitle}</h1>
+          <h1 className="min-w-0 font-display text-[20px] leading-tight text-ink sm:truncate sm:text-[24px] sm:leading-none">{pageTitle}</h1>
         </div>
 
         <div className="flex shrink-0 items-center gap-1">
