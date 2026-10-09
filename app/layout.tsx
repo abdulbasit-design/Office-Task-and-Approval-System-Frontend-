@@ -32,9 +32,10 @@ const themeScript = `try{var d=document.documentElement,t=localStorage.getItem("
 
 const directionContract = `<!--
 THESIS: Every decision is a note of value: numbered, engraved, countersigned. Refuses the slate-card SaaS dashboard of stat tiles and pill badges.
-OWN-WORLD: Cool security-paper ground, intaglio green-black ink, note-green actions, bronze foil only for seals, numbering red for serials and rejection. Square 2px frames with double engraved rules, generated guilloche rosettes, Bodoni Moda engraved caps, Archivo text, Azeret Mono serials.
+OWN-WORLD: Neutral grey security-paper ground, charcoal intaglio ink for text and actions, flat bronze only for seals and the submitted state, green only for approved, numbering red for serials, overdue and rejection. Square 2px frames with double engraved rules, generated guilloche rosettes, Bodoni Moda engraved caps, Archivo text, Azeret Mono serials.
 STORY: A manager sees what awaits their countersignature, decides with the note and trail on one screen, and watches the seal print.
-FIRST VIEWPORT: App: engraved title and date over one denomination strip; the countersign queue owns the main column. Landing: name in engraved caps at left, a live-drawn specimen note at right, Sign in as the primary action.
+FIRST VIEWPORT: App: Bodoni greeting, summary and dateline over one denomination strip; the countersign queue owns the main column. Landing: the tagline "Every decision, countersigned." at left under the engraved Countersign wordmark, a live-drawn specimen note at right, Sign in as the primary action.
+AMENDED: 2026-10-09 to the owner's decisions: name Countersign, Charcoal + Bronze palette, the approved landing hero.
 FORM: Treasury Note, grounded list #3, seed 07c05de7.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 -->`;

@@ -33,18 +33,20 @@ A focused approval loop with an auditable trail, not a general project-managemen
 - Task status: `PENDING`, `SUBMITTED`, `APPROVED`, `REJECTED`. Priority: `HIGH`, `MEDIUM`, `LOW`.
 - Notifications with read/unread state. Password resets are requested by users and resolved by admins.
 - Stack: Next.js 16 (App Router), React 19, Tailwind CSS v4, Redux Toolkit / RTK Query. API is a FastAPI service at `NEXT_PUBLIC_API_URL`.
-- Routes: `/` (public landing — currently the Next.js starter, to be replaced), `/login`, `/signup`, `/forgot-password`, `/dashboard`, `/tasks`, `/tasks/create`, `/tasks/[id]`, `/notifications`, `/users`, `/users/[id]`, `/departments`, `/password-reset-requests`, `/profile`.
+- Routes: `/` (public Countersign landing page), `/login`, `/signup`, `/forgot-password`, `/dashboard`, `/tasks`, `/tasks/create`, `/tasks/[id]`, `/notifications`, `/users`, `/users/[id]`, `/departments`, `/password-reset-requests`, `/profile`.
 - **Open:** the backend has no tenant/organization model yet, so multi-company use is an intent, not a shipped capability.
-- **Open:** product name (see Brand Commitments).
 
 ## Brand Commitments
 
-- Current name "Office Task & Approval System" is open to replacement (owner, 2026-10-09). The clipboard-with-check mark is not binding.
+- Name: **Countersign** (owner, 2026-10-09), replacing "Office Task & Approval System". The mark is a generated guilloche rosette; the old clipboard-with-check is retired.
+- Palette: **Charcoal + Bronze** (owner, 2026-10-09), chosen over the first security-paper green; "corporate does not necessarily mean blue".
+- Landing hero: "Every decision, countersigned." as rendered and approved by the owner.
 - Owner-stated visual constraint: a majestic theme meant for a corporate app, with good fonts.
 
 ## Evidence on Hand
 
 - Working product screens for every route above, and local test data (3 users across admin/manager/employee, 4 departments, 2 tasks, 9 notifications) in `../data.sql`.
+- QA accounts (`qa.*@test.com`) covering every role and account state, with tasks in every status, seeded through the API by `../seed_qa.py`.
 - No customers, logos, testimonials, metrics, pricing, case studies or press exist. Public pages must not invent them.
 
 ## Product Principles
