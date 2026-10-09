@@ -42,10 +42,10 @@ export function Avatar({ name, className = "h-9 w-9 text-[13px]" }: { name: stri
   );
 }
 
-// Roles read as square overprints, like task status badges.
+// Roles read as square overprints, like task status badges; authority shows as ink weight, never bronze.
 const ROLE_CONFIG: Record<UserResponse["role"], { label: string; className: string }> = {
-  admin: { label: "Admin", className: "text-note-ink border-note-ink/60 bg-note-tint" },
-  manager: { label: "Manager", className: "text-seal-ink border-seal bg-seal-tint" },
+  admin: { label: "Admin", className: "text-on-note border-note bg-note" },
+  manager: { label: "Manager", className: "text-note-ink border-note-ink/60 bg-note-tint" },
   employee: { label: "Employee", className: "text-ink-2 border-line-strong bg-paper-sunk" },
 };
 
