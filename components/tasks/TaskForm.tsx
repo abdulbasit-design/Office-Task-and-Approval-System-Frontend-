@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { WarningCircle } from "@phosphor-icons/react";
 import type { TaskCreate, TaskUpdate, TaskResponse } from "@/lib/api/taskApi";
 import { useGetUsersQuery } from "@/lib/api/userApi";
 import { useGetDepartmentsQuery } from "@/lib/api/departmentApi";
@@ -54,20 +55,31 @@ function toISOString(datetimeLocal: string): string {
   return new Date(datetimeLocal).toISOString();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Input helper
-// ─────────────────────────────────────────────────────────────────────────────
-function FieldError({ msg }: { msg?: string }) {
-  if (!msg) return null;
-  return <p className="mt-1 text-xs text-rose-600">{msg}</p>;
-}
-
-function Label({ htmlFor, children, required }: { htmlFor: string; children: React.ReactNode; required?: boolean }) {
+function Field({
+  id,
+  label,
+  required,
+  error,
+  hint,
+  children,
+}: {
+  id: string;
+  label: string;
+  required?: boolean;
+  error?: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <label htmlFor={htmlFor} className="block text-xs font-semibold text-slate-700 mb-1.5">
+    <div>
+      <label htmlFor={id} className="field-label">
+        {label}
+        {required && <span className="ml-1 font-normal text-ink-3">(required)</span>}
+      </label>
       {children}
-      {required && <span className="text-rose-500 font-bold ml-0.5">*</span>}
-    </label>
+      {hint && !error && <p id={`${id}-hint`} className="field-hint">{hint}</p>}
+      {error && <p id={`${id}-error`} className="field-error">{error}</p>}
+    </div>
   );
 }
 
@@ -80,7 +92,7 @@ export default function TaskForm({
   onSubmit,
   isLoading,
   apiError,
-  submitLabel = "Save Task",
+  submitLabel = "Save task",
   onCancel,
 }: TaskFormProps) {
   // Fetch users and departments so assignees can be chosen by name
@@ -95,22 +107,14 @@ export default function TaskForm({
     return map;
   }, [departments]);
 
-  const activeUsers = useMemo(() => {
-    return users.filter((u) => u.is_active);
-  }, [users]);
+  const activeUsers = useMemo(() => users.filter((u) => u.is_active), [users]);
 
   // ── Field state ────────────────────────────────────────────────────────────
   const [title, setTitle] = useState(initialValues?.title ?? "");
   const [description, setDescription] = useState(initialValues?.description ?? "");
-  const [assignedTo, setAssignedTo] = useState(
-    initialValues?.assigned_to ? String(initialValues.assigned_to) : ""
-  );
-  const [deadline, setDeadline] = useState(
-    initialValues?.deadline ? toDatetimeLocal(initialValues.deadline) : ""
-  );
-  const [priority, setPriority] = useState<"LOW" | "MEDIUM" | "HIGH">(
-    initialValues?.priority ?? "MEDIUM"
-  );
+  const [assignedTo, setAssignedTo] = useState(initialValues?.assigned_to ? String(initialValues.assigned_to) : "");
+  const [deadline, setDeadline] = useState(initialValues?.deadline ? toDatetimeLocal(initialValues.deadline) : "");
+  const [priority, setPriority] = useState<"LOW" | "MEDIUM" | "HIGH">(initialValues?.priority ?? "MEDIUM");
 
   // ── Validation errors ──────────────────────────────────────────────────────
   const [errors, setErrors] = useState<{
@@ -162,40 +166,19 @@ export default function TaskForm({
     await onSubmit(data);
   }
 
-  // ── Input class helper ─────────────────────────────────────────────────────
-  function inputClass(hasError?: string) {
-    return [
-      "w-full px-3.5 py-2.5 text-sm bg-white border rounded-xl text-slate-900",
-      "placeholder:text-slate-400 focus:outline-none transition-colors",
-      hasError
-        ? "border-rose-400 focus:border-rose-500 focus:ring-2 focus:ring-rose-200"
-        : "border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/15",
-    ].join(" ");
-  }
+  const described = (id: string, err?: string, hint?: boolean) =>
+    err ? `${id}-error` : hint ? `${id}-hint` : undefined;
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      noValidate
-      className="space-y-5"
-      aria-label="Task form"
-    >
-      {/* API Error Banner */}
+    <form onSubmit={handleSubmit} noValidate className="space-y-6" aria-label="Task form">
       {apiError && (
-        <div
-          role="alert"
-          className="flex items-start gap-2.5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700"
-        >
-          <svg className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-          </svg>
+        <div role="alert" className="flex items-start gap-3 rounded-sm border border-serial/50 bg-serial-tint p-3.5 text-[14px] text-ink">
+          <WarningCircle size={18} className="mt-0.5 shrink-0 text-serial" />
           <span>{apiError}</span>
         </div>
       )}
 
-      {/* Title */}
-      <div>
-        <Label htmlFor="task-title" required>Title</Label>
+      <Field id="task-title" label="Title" required error={errors.title}>
         <input
           id="task-title"
           type="text"
@@ -205,128 +188,103 @@ export default function TaskForm({
             setTitle(e.target.value);
             if (errors.title) setErrors((p) => ({ ...p, title: undefined }));
           }}
-          placeholder="Enter task title"
-          className={inputClass(errors.title)}
+          placeholder="What needs to be done"
+          className="input"
+          aria-invalid={errors.title ? true : undefined}
+          aria-describedby={described("task-title", errors.title)}
           disabled={isLoading}
         />
-        <FieldError msg={errors.title} />
-      </div>
+      </Field>
 
-      {/* Description */}
-      <div>
-        <Label htmlFor="task-description">Description</Label>
+      <Field id="task-description" label="Description" hint="Context the assignee needs: scope, sources, what done looks like.">
         <textarea
           id="task-description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Optional — provide additional context for this task."
-          rows={3}
-          className={`${inputClass()} resize-none`}
+          rows={4}
+          className="input resize-y"
+          aria-describedby="task-description-hint"
           disabled={isLoading}
         />
-      </div>
+      </Field>
 
-      {/* Assigned To (User Select by Name) */}
-      <div>
-        <Label htmlFor="task-assigned-to" required>Assign To (Employee / User)</Label>
+      <Field
+        id="task-assigned-to"
+        label="Assign to"
+        required
+        error={errors.assignedTo}
+        hint="Only active people are listed."
+      >
         {isUsersLoading ? (
-          <div className="h-10 bg-slate-100 rounded-xl animate-pulse" />
+          <div className="h-10 animate-pulse rounded-sm bg-paper-sunk" />
         ) : (
-          <div className="relative">
-            <select
-              id="task-assigned-to"
-              value={assignedTo}
-              onChange={(e) => {
-                setAssignedTo(e.target.value);
-                if (errors.assignedTo) setErrors((p) => ({ ...p, assignedTo: undefined }));
-              }}
-              className={inputClass(errors.assignedTo)}
-              disabled={isLoading}
-            >
-              <option value="">Select an assignee by name...</option>
-              {activeUsers.map((u) => {
-                const dept = u.department_name || (u.department_id ? deptMap[u.department_id] : null);
-                return (
-                  <option key={u.id} value={u.id}>
-                    {u.full_name} ({u.role}{dept ? ` · ${dept}` : ""})
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        )}
-        <p className="mt-1 text-[11px] text-slate-400">
-          Select the employee or colleague by name to assign this task to.
-        </p>
-        <FieldError msg={errors.assignedTo} />
-      </div>
-
-      {/* Deadline */}
-      <div>
-        <Label htmlFor="task-deadline" required>Deadline</Label>
-        <input
-          id="task-deadline"
-          type="datetime-local"
-          value={deadline}
-          onChange={(e) => {
-            setDeadline(e.target.value);
-            if (errors.deadline) setErrors((p) => ({ ...p, deadline: undefined }));
-          }}
-          className={inputClass(errors.deadline)}
-          disabled={isLoading}
-        />
-        <FieldError msg={errors.deadline} />
-      </div>
-
-      {/* Priority */}
-      <div>
-        <Label htmlFor="task-priority" required>Priority</Label>
-        <select
-          id="task-priority"
-          value={priority}
-          onChange={(e) => setPriority(e.target.value as "LOW" | "MEDIUM" | "HIGH")}
-          className={inputClass(errors.priority)}
-          disabled={isLoading}
-        >
-          <option value="LOW">Low</option>
-          <option value="MEDIUM">Medium</option>
-          <option value="HIGH">High</option>
-        </select>
-        <FieldError msg={errors.priority} />
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center gap-3 pt-2">
-        <button
-          id="task-form-submit"
-          type="submit"
-          disabled={isLoading}
-          className="flex-1 sm:flex-none py-2.5 px-6 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-xl shadow-sm transition duration-150 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-        >
-          {isLoading ? (
-            <>
-              <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
-              Saving…
-            </>
-          ) : (
-            submitLabel
-          )}
-        </button>
-
-        {onCancel && (
-          <button
-            id="task-form-cancel"
-            type="button"
-            onClick={onCancel}
+          <select
+            id="task-assigned-to"
+            value={assignedTo}
+            onChange={(e) => {
+              setAssignedTo(e.target.value);
+              if (errors.assignedTo) setErrors((p) => ({ ...p, assignedTo: undefined }));
+            }}
+            className="input"
+            aria-invalid={errors.assignedTo ? true : undefined}
+            aria-describedby={described("task-assigned-to", errors.assignedTo, true)}
             disabled={isLoading}
-            className="py-2.5 px-5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-sm rounded-xl transition duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
           >
+            <option value="">Select a person</option>
+            {activeUsers.map((u) => {
+              const dept = u.department_name || (u.department_id ? deptMap[u.department_id] : null);
+              return (
+                <option key={u.id} value={u.id}>
+                  {u.full_name} ({u.role}{dept ? `, ${dept}` : ""})
+                </option>
+              );
+            })}
+          </select>
+        )}
+      </Field>
+
+      <div className="grid gap-6 sm:grid-cols-2">
+        <Field id="task-deadline" label="Deadline" required error={errors.deadline}>
+          <input
+            id="task-deadline"
+            type="datetime-local"
+            value={deadline}
+            onChange={(e) => {
+              setDeadline(e.target.value);
+              if (errors.deadline) setErrors((p) => ({ ...p, deadline: undefined }));
+            }}
+            className="input tabular"
+            aria-invalid={errors.deadline ? true : undefined}
+            aria-describedby={described("task-deadline", errors.deadline)}
+            disabled={isLoading}
+          />
+        </Field>
+
+        <Field id="task-priority" label="Priority" required error={errors.priority}>
+          <select
+            id="task-priority"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value as "LOW" | "MEDIUM" | "HIGH")}
+            className="input"
+            disabled={isLoading}
+          >
+            <option value="LOW">Low</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">High</option>
+          </select>
+        </Field>
+      </div>
+
+      <div className="flex flex-col-reverse gap-3 border-t border-line pt-5 sm:flex-row sm:justify-end">
+        {onCancel && (
+          <button id="task-form-cancel" type="button" onClick={onCancel} disabled={isLoading} className="btn btn-secondary">
             Cancel
           </button>
         )}
+        <button id="task-form-submit" type="submit" disabled={isLoading} className="btn btn-primary">
+          {isLoading && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent" aria-hidden="true" />}
+          {isLoading ? "Saving..." : submitLabel}
+        </button>
       </div>
     </form>
   );
