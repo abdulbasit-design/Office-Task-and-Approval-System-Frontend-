@@ -13,7 +13,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <BrandMark />
         </Link>
         <div className="flex flex-1 items-center justify-center py-10">
-          <Rosette seed={1926} variant="hero" draw className="aspect-square w-full max-w-[400px] text-note-ink/60" />
+          <Rosette seed={1926} variant="hero" draw className="lathe aspect-square w-full max-w-[400px] text-note-ink/60" />
         </div>
         <p className="font-display text-[26px] leading-tight text-ink">Every decision, countersigned.</p>
       </aside>

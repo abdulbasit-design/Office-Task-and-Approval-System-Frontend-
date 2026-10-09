@@ -174,13 +174,13 @@ export default function UserTable({
                   </td>
                 </tr>
               ) : (
-                users.map((user) => {
+                users.map((user, i) => {
                   const isSelf = currentUserId === user.id;
                   const deptName = user.department_id ? deptMap.get(user.department_id) : null;
                   const managerName = user.manager_id ? userMap.get(user.manager_id) : null;
 
                   return (
-                    <tr key={user.id} className="transition-colors hover:bg-paper-sunk">
+                    <tr key={user.id} className="rise transition-colors hover:bg-paper-sunk" style={{ "--i": i } as React.CSSProperties}>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
                           <Avatar name={user.full_name} />
@@ -255,12 +255,12 @@ export default function UserTable({
 
       {/* Delete confirmation */}
       {userToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
+        <div className="dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="delete-user-title"
-            className="panel w-full max-w-md space-y-4 p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
+            className="dialog-panel panel w-full max-w-md space-y-4 p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
           >
             <CloseOnEscape onClose={() => setUserToDelete(null)} />
             <div>

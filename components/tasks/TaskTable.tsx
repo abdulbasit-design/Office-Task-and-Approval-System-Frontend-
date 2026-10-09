@@ -74,11 +74,11 @@ export default function TaskTable({ tasks, isLoading = false, filtered = false }
                 </td>
               </tr>
             ) : (
-              tasks.map((task) => {
+              tasks.map((task, i) => {
                 const due = dueLabel(task.deadline);
                 const settled = task.status === "APPROVED";
                 return (
-                  <tr key={task.id} className="group relative transition-colors hover:bg-paper-sunk">
+                  <tr key={task.id} className="rise group relative transition-colors hover:bg-paper-sunk" style={{ "--i": i } as React.CSSProperties}>
                     <td className="px-5 py-4 align-top">
                       <Serial id={task.id} />
                     </td>
@@ -113,7 +113,7 @@ export default function TaskTable({ tasks, isLoading = false, filtered = false }
                       )}
                     </td>
                     <td className="px-4 py-4 align-top text-ink-3 group-hover:text-note-ink">
-                      <CaretRight size={16} aria-hidden="true" />
+                      <CaretRight size={16} aria-hidden="true" className="nudge" />
                     </td>
                   </tr>
                 );

@@ -146,7 +146,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
               <div
                 role="menu"
                 aria-labelledby="user-menu-button"
-                className="panel absolute right-0 z-50 mt-2 w-56 py-1 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
+                className="menu-in panel absolute right-0 z-50 mt-2 w-56 py-1 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
               >
                 <div className="border-b border-line px-4 py-3">
                   <p className="truncate text-[13px] font-semibold text-ink">{fullName}</p>

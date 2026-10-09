@@ -98,13 +98,13 @@ export default function AdminResetPasswordModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-ink/40 p-4"
+      className="dialog-backdrop fixed inset-0 z-50 flex justify-center overflow-y-auto bg-ink/40 p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <CloseOnEscape onClose={handleClose} />
-      <div className="panel relative my-auto w-full max-w-md p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)] sm:p-7">
+      <div className="dialog-panel panel relative my-auto w-full max-w-md p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)] sm:p-7">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 id="modal-title" className="font-display text-[26px] leading-tight text-ink">

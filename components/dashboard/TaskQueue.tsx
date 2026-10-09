@@ -5,6 +5,7 @@ import type { TaskResponse } from "@/lib/api/taskApi";
 import { PriorityBadge, StatusBadge } from "@/components/tasks/TaskStatusBadge";
 import Rosette from "@/components/ui/Rosette";
 import Serial from "@/components/ui/Serial";
+import CountUp from "@/components/ui/CountUp";
 import { dueLabel, formatDate } from "@/lib/format";
 
 type Perspective = "approver" | "assignee";
@@ -23,7 +24,7 @@ function byDeadline(a: TaskResponse, b: TaskResponse) {
   return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
 }
 
-function QueueRow({ task, perspective }: { task: TaskResponse; perspective: Perspective }) {
+function QueueRow({ task, perspective, index }: { task: TaskResponse; perspective: Perspective; index: number }) {
   const due = dueLabel(task.deadline);
   const who =
     perspective === "approver"
@@ -33,14 +34,14 @@ function QueueRow({ task, perspective }: { task: TaskResponse; perspective: Pers
       : `From ${task.created_by_name ?? "your manager"}`;
 
   return (
-    <li>
+    <li className="rise" style={{ "--i": index } as React.CSSProperties}>
       <Link
         href={`/tasks/${task.id}`}
         className="group grid grid-cols-[1fr_auto] gap-x-5 gap-y-2 px-5 py-4 transition-colors hover:bg-paper-sunk sm:grid-cols-[7.5rem_1fr_auto] sm:items-center"
       >
         <Serial id={task.id} className="hidden sm:inline-flex" />
         <div className="min-w-0">
-          <p className="truncate text-[15px] font-semibold text-ink group-hover:text-note-ink">{task.title}</p>
+          <p className="nudge truncate text-[15px] font-semibold text-ink">{task.title}</p>
           <p className="mt-0.5 truncate text-[13px] text-ink-3">{who}</p>
           {task.status === "REJECTED" && task.rejection_reason && (
             <p className="mt-1.5 line-clamp-2 font-display text-[15px] italic leading-snug text-serial">
@@ -49,7 +50,7 @@ function QueueRow({ task, perspective }: { task: TaskResponse; perspective: Pers
           )}
         </div>
         <div className="flex flex-col items-end gap-1.5 text-right">
-          <span className={`tabular text-[13px] font-medium ${due.overdue ? "text-serial" : due.soon ? "text-seal-ink" : "text-ink-2"}`}>
+          <span className={`tabular whitespace-nowrap text-[13px] font-medium ${due.overdue ? "text-serial" : due.soon ? "text-seal-ink" : "text-ink-2"}`}>
             {due.text}
           </span>
           <span className="flex items-center gap-3">
@@ -68,7 +69,7 @@ export default function TaskQueue({ title, tasks, perspective, emptyTitle, empty
     <section aria-label={title} className={primary ? "frame" : "panel"}>
       <header className="flex items-baseline justify-between gap-4 border-b border-line px-5 pb-3 pt-5">
         <h2 className={`font-display leading-tight text-ink ${primary ? "text-[24px]" : "text-[20px]"}`}>{title}</h2>
-        <span className="font-display text-[22px] leading-none text-ink-3 tabular">{sorted.length}</span>
+        <CountUp value={sorted.length} className="font-display text-[22px] leading-none text-ink-3 tabular" />
       </header>
 
       {sorted.length === 0 ? (
@@ -81,8 +82,8 @@ export default function TaskQueue({ title, tasks, perspective, emptyTitle, empty
         </div>
       ) : (
         <ul className="divide-y divide-line">
-          {sorted.slice(0, primary ? 8 : 5).map((t) => (
-            <QueueRow key={t.id} task={t} perspective={perspective} />
+          {sorted.slice(0, primary ? 8 : 5).map((t, i) => (
+            <QueueRow key={t.id} task={t} perspective={perspective} index={i} />
           ))}
         </ul>
       )}

@@ -82,7 +82,7 @@ export default function TaskActivity({ activityLog, assigneeId, timestamps, note
                       ? "border-seal bg-seal-tint"
                       : "border-note-ink bg-note-tint";
               return (
-                <li key={i} className="relative grid pl-7 sm:grid-cols-2 sm:pl-0">
+                <li key={i} className="rise relative grid pl-7 sm:grid-cols-2 sm:pl-0" style={{ "--i": i * 2 } as React.CSSProperties}>
                   <span
                     aria-hidden="true"
                     className={`absolute left-0 top-1.5 h-[11px] w-[11px] rotate-45 border sm:left-1/2 sm:-translate-x-1/2 ${tone}`}

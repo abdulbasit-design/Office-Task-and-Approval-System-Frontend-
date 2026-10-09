@@ -162,12 +162,12 @@ export default function DepartmentsPage() {
 
       {/* Create / edit dialog */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
+        <div className="dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="department-dialog-title"
-            className="panel w-full max-w-lg p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
+            className="dialog-panel panel w-full max-w-lg p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
           >
             <CloseOnEscape onClose={handleModalClose} />
             <div className="mb-5 flex items-center justify-between gap-4 border-b border-line pb-3">

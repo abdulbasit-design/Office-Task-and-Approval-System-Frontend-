@@ -272,8 +272,8 @@ export default function NotificationsPage() {
               <li key={label}>
                 <h2 className="caps border-b border-line bg-paper-sunk px-5 py-2.5 text-ink-3">{label}</h2>
                 <ol className="divide-y divide-line">
-                  {items.map((notification) => (
-                    <li key={notification.id}>
+                  {items.map((notification, i) => (
+                    <li key={notification.id} className="rise" style={{ "--i": i } as React.CSSProperties}>
                       <NotificationItem notification={notification} />
                     </li>
                   ))}

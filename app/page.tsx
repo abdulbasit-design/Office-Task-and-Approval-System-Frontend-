@@ -53,7 +53,7 @@ function SpecimenNote() {
           </div>
 
           <div className="relative mx-auto h-48 w-48 sm:h-56 sm:w-56">
-            <Rosette seed={124} variant="hero" draw className="absolute inset-0 h-full w-full text-note-ink/70" />
+            <Rosette seed={124} variant="hero" draw className="lathe absolute inset-0 h-full w-full text-note-ink/70" />
             <div className="absolute -bottom-4 -left-8">
               <Seal seed={124} legend="Countersigned" sub="12 Oct 2026" size={112} press className="[animation-delay:1.9s]" />
             </div>
@@ -162,13 +162,13 @@ export default function LandingPage() {
         {/* ── How a task moves ── */}
         <section aria-labelledby="route-heading" className="border-y border-line bg-paper-raised">
           <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
-            <h2 id="route-heading" className="font-display text-[34px] leading-tight text-ink sm:text-[40px]">
+            <h2 id="route-heading" className="reveal font-display text-[34px] leading-tight text-ink sm:text-[40px]">
               How a task moves
             </h2>
             <ol className="relative mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
-              <span aria-hidden="true" className="absolute left-0 right-0 top-6 hidden border-t border-dashed border-line-strong md:block" />
+              <span aria-hidden="true" className="draw-line absolute left-0 right-0 top-6 hidden border-t border-dashed border-line-strong md:block" />
               {STATIONS.map((s, i) => (
-                <li key={s.verb} className="relative">
+                <li key={s.verb} className="reveal relative">
                   <span className="relative block h-12 w-12 rounded-full bg-paper-raised text-note-ink">
                     <Rosette seed={300 + i} variant="mark" className="h-12 w-12" />
                   </span>
@@ -186,7 +186,7 @@ export default function LandingPage() {
         {/* ── The record ── */}
         <section aria-labelledby="record-heading" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
           <div className="max-w-[60ch]">
-            <h2 id="record-heading" className="font-display text-[34px] leading-tight text-ink sm:text-[40px]">
+            <h2 id="record-heading" className="reveal font-display text-[34px] leading-tight text-ink sm:text-[40px]">
               Nothing happens off the record.
             </h2>
             <p className="mt-4 text-[17px] leading-relaxed text-ink-2">
@@ -202,7 +202,7 @@ export default function LandingPage() {
             <ol className="relative space-y-5">
               <span aria-hidden="true" className="absolute bottom-0 left-1/2 top-0 border-l border-line-strong" />
               {TRAIL.map((e, i) => (
-                <li key={i} className="relative grid grid-cols-2 gap-8">
+                <li key={i} className="reveal relative grid grid-cols-2 gap-8">
                   <span
                     aria-hidden="true"
                     className={`absolute left-1/2 top-2 h-2.5 w-2.5 -translate-x-1/2 rotate-45 border ${
@@ -226,7 +226,7 @@ export default function LandingPage() {
         {/* ── Roles ── */}
         <section aria-labelledby="roles-heading" className="border-t border-line bg-paper-raised">
           <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
-            <h2 id="roles-heading" className="font-display text-[34px] leading-tight text-ink sm:text-[40px]">
+            <h2 id="roles-heading" className="reveal font-display text-[34px] leading-tight text-ink sm:text-[40px]">
               Authority follows the role
             </h2>
             <p className="mt-4 max-w-[60ch] text-[17px] leading-relaxed text-ink-2">
@@ -244,7 +244,7 @@ export default function LandingPage() {
                 </thead>
                 <tbody>
                   {CAPABILITIES.map((c) => (
-                    <tr key={c.label} className="border-b border-line last:border-b-0">
+                    <tr key={c.label} className="reveal border-b border-line last:border-b-0">
                       <th scope="row" className="py-3.5 pr-4 font-normal text-ink">{c.label}</th>
                       {ROLES.map((r) => (
                         <td key={r} className="py-3.5 text-center">
@@ -265,13 +265,11 @@ export default function LandingPage() {
 
         {/* ── Close ── */}
         <section className="relative overflow-hidden border-t border-line">
-          <Rosette
-            seed={2026}
-            variant="hero"
-            className="pointer-events-none absolute -right-40 top-1/2 h-[560px] w-[560px] -translate-y-1/2 text-note-ink/20"
-          />
+          <div className="pointer-events-none absolute -right-40 top-1/2 h-[560px] w-[560px] -translate-y-1/2">
+            <Rosette seed={2026} variant="hero" className="lathe h-full w-full text-note-ink/20" />
+          </div>
           <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-            <h2 className="font-display text-[38px] leading-tight text-ink sm:text-[48px]">
+            <h2 className="reveal font-display text-[38px] leading-tight text-ink sm:text-[48px]">
               Put your approvals on the record.
             </h2>
             <div className="mt-8 flex flex-wrap gap-3">

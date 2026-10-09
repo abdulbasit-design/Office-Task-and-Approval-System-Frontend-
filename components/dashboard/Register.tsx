@@ -4,6 +4,7 @@ import type { TaskResponse } from "@/lib/api/taskApi";
 import { StatusBadge } from "@/components/tasks/TaskStatusBadge";
 import Rosette from "@/components/ui/Rosette";
 import { formatDate } from "@/lib/format";
+import CountUp from "@/components/ui/CountUp";
 
 const ORDER: TaskResponse["status"][] = ["SUBMITTED", "PENDING", "REJECTED", "APPROVED"];
 
@@ -14,22 +15,22 @@ export function Register({ tasks }: { tasks: TaskResponse[] }) {
     <section aria-labelledby="register-heading" className="panel px-5 pb-4 pt-5">
       <h2 id="register-heading" className="font-display text-[20px] leading-tight text-ink">Register</h2>
       <ul className="mt-4 space-y-1">
-        {ORDER.map((s) => (
-          <li key={s}>
+        {ORDER.map((s, i) => (
+          <li key={s} className="rise" style={{ "--i": i } as React.CSSProperties}>
             <Link
               href={`/tasks?status=${s}`}
               className="-mx-2 flex items-center gap-3 rounded-sm px-2 py-1.5 transition-colors hover:bg-paper-sunk"
             >
               <StatusBadge status={s} />
               <span aria-hidden="true" className="h-0 flex-1 translate-y-1 border-b border-dotted border-line-strong" />
-              <span className="font-display text-[22px] leading-none text-ink tabular">{count(s)}</span>
+              <CountUp value={count(s)} className="font-display text-[22px] leading-none text-ink tabular" />
             </Link>
           </li>
         ))}
       </ul>
       <div className="mt-3 flex items-center justify-between border-t-[3px] border-double border-line-strong pt-3">
         <span className="caps text-ink-3">Total</span>
-        <span className="font-display text-[22px] leading-none text-ink tabular">{tasks.length}</span>
+        <CountUp value={tasks.length} className="font-display text-[22px] leading-none text-ink tabular" />
       </div>
     </section>
   );
@@ -52,7 +53,7 @@ export function RecentlySealed({ tasks }: { tasks: TaskResponse[] }) {
           {sealed.map((t) => (
             <li key={t.id}>
               <Link href={`/tasks/${t.id}`} className="group flex items-center gap-3 py-3">
-                <Rosette seed={t.id} variant="mark" className="h-9 w-9 shrink-0 text-seal" />
+                <Rosette seed={t.id} variant="mark" className="lathe-hover h-9 w-9 shrink-0 text-seal" />
                 <span className="min-w-0">
                   <span className="block truncate text-[14px] font-semibold text-ink group-hover:text-note-ink">{t.title}</span>
                   <span className="block text-[12px] text-ink-3 tabular">

@@ -51,9 +51,9 @@ function Spinner() {
 // ── Dialog shell ─────────────────────────────────────────────────────────────
 function Dialog({ id, title, body, onClose, children }: { id: string; title: string; body: string; onClose: () => void; children: React.ReactNode }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4" role="dialog" aria-modal="true" aria-labelledby={id}>
+    <div className="dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4" role="dialog" aria-modal="true" aria-labelledby={id}>
       <CloseOnEscape onClose={onClose} />
-      <div className="panel w-full max-w-md p-6 shadow-[0_24px_60px_-20px_rgb(var(--shadow-color)/0.5)]">
+      <div className="dialog-panel panel w-full max-w-md p-6 shadow-[0_24px_60px_-20px_rgb(var(--shadow-color)/0.5)]">
         <h3 id={id} className="font-display text-[24px] leading-tight text-ink">{title}</h3>
         <p className="mt-1 text-[14px] text-ink-2">{body}</p>
         <div className="mt-5 space-y-4">{children}</div>
@@ -341,7 +341,9 @@ export default function TaskDetailPage() {
               <header className="flex flex-wrap items-center justify-between gap-3">
                 <Serial id={task.id} />
                 <div className="flex items-center gap-4">
-                  <StatusBadge status={task.status} />
+                  <span key={task.status} className="stamp-in inline-flex">
+                    <StatusBadge status={task.status} />
+                  </span>
                   <PriorityBadge priority={task.priority} />
                 </div>
               </header>

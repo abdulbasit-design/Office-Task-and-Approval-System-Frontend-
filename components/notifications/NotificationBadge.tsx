@@ -23,8 +23,9 @@ export default function NotificationBadge({ skip = false }: NotificationBadgePro
 
   return (
     <span
+      key={unreadCount}
       aria-label={`${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}`}
-      className="absolute right-0.5 top-0.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full border-2 border-paper bg-serial-fill px-1 font-mono text-[9px] font-semibold leading-none text-white"
+      className="pop-in absolute right-0.5 top-0.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full border-2 border-paper bg-serial-fill px-1 font-mono text-[9px] font-semibold leading-none text-white"
     >
       {unreadCount > 9 ? "9+" : unreadCount}
     </span>

@@ -102,11 +102,11 @@ export default function DepartmentTable({
                   </td>
                 </tr>
               ) : (
-                departments.map((dept) => {
+                departments.map((dept, i) => {
                   const memberCount = userCounts[dept.id] || 0;
 
                   return (
-                    <tr key={dept.id} className="transition-colors hover:bg-paper-sunk">
+                    <tr key={dept.id} className="rise transition-colors hover:bg-paper-sunk" style={{ "--i": i } as React.CSSProperties}>
                       <td className="px-4 py-3">
                         <span className="block font-semibold text-ink">{dept.name}</span>
                         <span className="font-mono text-[12px] text-ink-3">ID {dept.id}</span>
@@ -162,12 +162,12 @@ export default function DepartmentTable({
 
       {/* Delete confirmation */}
       {deptToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
+        <div className="dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="delete-department-title"
-            className="panel w-full max-w-md space-y-4 p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
+            className="dialog-panel panel w-full max-w-md space-y-4 p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
           >
             <CloseOnEscape onClose={() => setDeptToDelete(null)} />
             <div>

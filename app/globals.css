@@ -225,8 +225,18 @@ textarea::placeholder {
   .btn:active:not(:disabled) { transform: translateY(1px); }
   .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
-  .btn-primary { background: var(--note); color: var(--on-note); }
+  .btn-primary { background: var(--note); color: var(--on-note); position: relative; overflow: hidden; isolation: isolate; }
   .btn-primary:hover:not(:disabled) { background: var(--note-deep); }
+  /* Foil sheen: a band of light crosses the fill on hover */
+  .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 30%, color-mix(in oklab, var(--on-note) 22%, transparent) 50%, transparent 70%);
+    transform: translateX(-120%);
+    pointer-events: none;
+  }
 
   .btn-secondary {
     background: var(--paper-raised);
@@ -301,6 +311,38 @@ textarea::placeholder {
   to { opacity: 1; transform: none; }
 }
 
+@keyframes lathe {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes stamp {
+  0% { opacity: 0; transform: scale(1.35) rotate(-6deg); }
+  55% { opacity: 1; transform: scale(0.96) rotate(1deg); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.15); opacity: 1; }
+  100% { transform: none; }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+}
+
+@keyframes settle {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+}
+
+@keyframes unfold {
+  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+}
+
+@keyframes draw-x {
+  from { transform: scaleX(0); }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .rosette-draw path {
     stroke-dasharray: 1;
@@ -310,4 +352,41 @@ textarea::placeholder {
   .seal-press { animation: seal-press 520ms var(--ease-out-expo) both; }
   .rise { animation: rise 420ms var(--ease-out-expo) both; animation-delay: calc(var(--i, 0) * 40ms); }
   .icon-turn { animation: icon-turn 480ms var(--ease-out-expo) both; }
+
+  /* Each route's content settles in */
+  .page-enter { animation: rise 460ms var(--ease-out-expo) both; }
+
+  /* Large rosettes turn slowly, like the lathe that cuts them */
+  .lathe { animation: lathe 160s linear infinite; }
+  .lathe-hover { transition: transform 900ms var(--ease-out-expo); }
+  .group:hover .lathe-hover { transform: rotate(60deg); }
+
+  .stamp-in { animation: stamp 520ms var(--ease-out-expo) both; }
+  .pop-in { animation: pop 420ms var(--ease-out-expo) both; }
+
+  .dialog-backdrop { animation: fade 220ms ease-out both; }
+  .dialog-panel { animation: settle 360ms var(--ease-out-expo) both; }
+  .menu-in { animation: unfold 200ms var(--ease-out-expo) both; transform-origin: top right; }
+
+  .btn-primary::after { transition: transform 750ms var(--ease-out-expo); }
+  .btn-primary:hover:not(:disabled)::after { transform: translateX(120%); }
+
+  /* Rows nudge toward their target on hover */
+  .nudge { transition: transform 220ms var(--ease-out-expo); }
+  .group:hover .nudge { transform: translateX(3px); }
+
+  /* Landing: sections reveal as they scroll in (where scroll timelines exist) */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+    .draw-line {
+      transform-origin: left;
+      animation: draw-x linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 40%;
+    }
+  }
 }

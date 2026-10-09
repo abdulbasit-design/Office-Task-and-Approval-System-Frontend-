@@ -206,12 +206,12 @@ export default function UserDetailPage() {
       <UserForm user={user} departments={departments} users={allUsers} />
 
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
+        <div className="dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="delete-account-title"
-            className="panel w-full max-w-md space-y-4 p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
+            className="dialog-panel panel w-full max-w-md space-y-4 p-6 shadow-[0_16px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
           >
             <CloseOnEscape onClose={() => setShowDeleteModal(false)} />
             <div>
