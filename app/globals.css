@@ -472,7 +472,8 @@ textarea::placeholder {
   }
 
   /* Each route's content settles in */
-  .page-enter { animation: rise 460ms var(--ease-out-expo) both; }
+  /* backwards, not both: a finished transform would trap fixed-position children (sheets, scrims) */
+  .page-enter { animation: rise 460ms var(--ease-out-expo) backwards; }
 
   /* Large rosettes turn slowly, like the lathe that cuts them */
   .lathe { animation: lathe 160s linear infinite; }
