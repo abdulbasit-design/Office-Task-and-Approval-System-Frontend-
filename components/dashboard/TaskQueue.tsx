@@ -41,7 +41,7 @@ function QueueRow({ task, perspective, index }: { task: TaskResponse; perspectiv
       >
         <Serial id={task.id} className="hidden sm:inline-flex" />
         <div className="min-w-0">
-          <p className="nudge truncate text-[15px] font-semibold text-ink">{task.title}</p>
+          <p className="nudge text-[15px] font-semibold leading-snug text-ink max-sm:line-clamp-2 sm:truncate">{task.title}</p>
           <p className="mt-0.5 truncate text-[13px] text-ink-3">{who}</p>
           {task.status === "REJECTED" && task.rejection_reason && (
             <p className="mt-1.5 line-clamp-2 font-display text-[15px] italic leading-snug text-serial">
