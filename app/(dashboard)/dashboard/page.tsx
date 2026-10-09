@@ -11,11 +11,11 @@ import { greeting } from "@/lib/format";
 
 function Skeleton() {
   return (
-    <div className="grid gap-6 xl:grid-cols-[1fr_340px]" aria-busy="true" aria-label="Loading your tasks">
-      <div className="frame h-[420px] animate-pulse" />
-      <div className="space-y-6">
-        <div className="panel h-56 animate-pulse" />
-        <div className="panel h-48 animate-pulse" />
+    <div className="space-y-8" aria-busy="true" aria-label="Loading your tasks">
+      <div className="h-[86px] animate-pulse border-y-[3px] border-double border-line-strong bg-paper-sunk" />
+      <div className="grid gap-6 xl:grid-cols-[1fr_340px]">
+        <div className="frame h-[420px] animate-pulse" />
+        <div className="panel h-64 animate-pulse" />
       </div>
     </div>
   );
@@ -53,12 +53,12 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[13px] text-ink-3">{today}</p>
-          <h2 className="mt-1 font-display text-[32px] leading-tight text-ink sm:text-[36px]">
+          <h2 className="font-display text-[32px] leading-tight text-ink sm:text-[36px]">
             {greeting()}
             {firstName ? `, ${firstName}` : ""}.
           </h2>
           {!isLoading && !isError && <p className="mt-1 text-[16px] text-ink-2">{summary}</p>}
+          <p className="mt-1 text-[13px] text-ink-3">{today}</p>
         </div>
         {role === "manager" && (
           <Link href="/tasks/create" className="btn btn-primary self-start sm:self-auto">
@@ -76,6 +76,8 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+
+      {!isLoading && !isError && <Register tasks={tasks} />}
 
       {isLoading ? (
         <Skeleton />
@@ -122,7 +124,6 @@ export default function DashboardPage() {
               )}
             </div>
             <aside className="space-y-6">
-              <Register tasks={tasks} />
               <RecentlySealed tasks={tasks} />
             </aside>
           </div>
