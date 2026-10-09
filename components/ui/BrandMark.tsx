@@ -6,7 +6,9 @@ export default function BrandMark({ className = "", compact = false }: { classNa
   return (
     <span className={`group inline-flex items-center gap-2.5 ${className}`}>
       <Rosette seed={1926} variant="mark" className="lathe-hover w-8 h-8 text-note-ink shrink-0" />
-      {!compact && <span className="engraved text-[17px] leading-none text-ink collapsed:hidden">Countersign</span>}
+      {!compact && (
+        <span className="fold-label engraved whitespace-nowrap text-[17px] leading-none text-ink">Countersign</span>
+      )}
     </span>
   );
 }

@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useSyncExternalStore } from "react";
+import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bell,
   Buildings,
-  CaretDoubleLeft,
-  CaretDoubleRight,
+  CaretLeft,
+  CaretRight,
   ClipboardText,
   House,
   Key,
@@ -65,11 +65,44 @@ function subscribeRail(listener: () => void) {
   };
 }
 
+const typing = (el: EventTarget | null) =>
+  el instanceof HTMLElement && (el.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(el.tagName));
+
 export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { data: currentUser } = useGetMeQuery();
   const isAdmin = currentUser?.role === "admin";
   const collapsed = useSyncExternalStore(subscribeRail, readCollapsed, () => false);
+
+  // A folded rail peeks open over the page on hover or keyboard focus
+  const [peek, setPeek] = useState(false);
+  const peekTimer = useRef<number | undefined>(undefined);
+  const schedulePeek = (open: boolean, delay: number) => {
+    window.clearTimeout(peekTimer.current);
+    peekTimer.current = window.setTimeout(() => setPeek(open), delay);
+  };
+  const toggle = () => {
+    window.clearTimeout(peekTimer.current);
+    setPeek(false);
+    setCollapsed(!readCollapsed());
+  };
+
+  // "[" folds and unfolds, as in most workspace tools
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "[" || e.metaKey || e.ctrlKey || e.altKey || typing(e.target)) return;
+      e.preventDefault();
+      window.clearTimeout(peekTimer.current);
+      setPeek(false);
+      setCollapsed(!readCollapsed());
+    };
+    document.addEventListener("keydown", onKey);
+    const timer = peekTimer;
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      window.clearTimeout(timer.current);
+    };
+  }, []);
 
   const isActive = (href: string) =>
     pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
@@ -82,16 +115,15 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
         <Link
           href={item.href}
           onClick={onClose}
-          title={item.label}
           aria-current={active ? "page" : undefined}
-          className={`flex items-center gap-3 rounded-sm px-3 py-2 text-[14px] transition-colors duration-150 collapsed:justify-center collapsed:px-0 ${
+          className={`flex items-center gap-3 rounded-sm px-3 py-2 text-[14px] transition-colors duration-150 collapsed:w-11 ${
             active
               ? "bg-note-tint font-semibold text-note-ink shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--note-ink)_22%,transparent)]"
               : "text-ink-2 hover:bg-paper-sunk hover:text-ink"
           }`}
         >
           <Icon size={19} weight={active ? "fill" : "regular"} className="shrink-0" aria-hidden="true" />
-          <span className="truncate collapsed:sr-only">{item.label}</span>
+          <span className="fold-label truncate">{item.label}</span>
         </Link>
       </li>
     );
@@ -99,38 +131,44 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
   const group = (label: string, items: NavItem[]) => (
     <div>
-      <p className="caps px-3 pb-2 text-ink-3 collapsed:sr-only">{label}</p>
-      <span aria-hidden="true" className="mx-2 mb-2 hidden border-t border-line collapsed:block" />
+      <div className="relative px-3 pb-2">
+        <p className="fold-label caps whitespace-nowrap text-ink-3">{label}</p>
+        <span aria-hidden="true" className="fold-rule absolute inset-x-1 top-[7px] border-t border-line-strong" />
+      </div>
       <ul className="space-y-0.5" role="list">{items.map(renderItem)}</ul>
     </div>
   );
 
+  // Icons sit at a fixed x in both states (rail centre is 36px), so folding
+  // narrows the panel around them instead of shuffling the layout.
   const navContent = (
-    <nav aria-label="Main navigation" className="flex h-full flex-col">
-      <div className="flex h-16 shrink-0 items-center border-b border-line px-5 collapsed:justify-center collapsed:px-0">
+    <nav aria-label="Main navigation" className="flex h-full w-full min-w-60 flex-col">
+      <div className="flex h-16 shrink-0 items-center border-b border-line px-5">
         <Link href="/dashboard" onClick={onClose} aria-label="Countersign dashboard">
           <BrandMark />
         </Link>
       </div>
 
-      <div className="flex-1 space-y-7 overflow-y-auto overflow-x-hidden px-3 py-6 collapsed:space-y-4">
+      <div className="flex-1 space-y-7 overflow-y-auto overflow-x-hidden px-[14px] py-6">
         {group("Work", WORK)}
         {isAdmin && group("Administration", ADMIN)}
       </div>
 
-      <div className="space-y-0.5 border-t border-line px-3 py-3">
+      <div className="border-t border-line px-[14px] py-3">
         <ul role="list">{renderItem({ label: "Profile", href: "/profile", icon: UserCircle })}</ul>
         <button
           type="button"
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={toggle}
           aria-controls="desktop-sidebar"
           aria-expanded={!collapsed}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="hidden w-full items-center gap-3 rounded-sm px-3 py-2 text-[14px] text-ink-3 transition-colors hover:bg-paper-sunk hover:text-ink collapsed:justify-center collapsed:px-0 lg:flex"
+          aria-keyshortcuts="["
+          className="mt-0.5 hidden w-full items-center gap-3 rounded-sm px-3 py-2 text-[14px] text-ink-3 transition-colors hover:bg-paper-sunk hover:text-ink lg:flex"
         >
-          {collapsed ? <CaretDoubleRight size={18} aria-hidden="true" /> : <CaretDoubleLeft size={18} aria-hidden="true" />}
-          <span className="collapsed:sr-only">Collapse</span>
+          {collapsed ? <CaretRight size={19} aria-hidden="true" /> : <CaretLeft size={19} aria-hidden="true" />}
+          <span className="fold-label flex flex-1 items-center justify-between whitespace-nowrap">
+            {collapsed ? "Keep open" : "Fold sidebar"}
+            <kbd className="rounded-sm border border-line px-1.5 font-mono text-[11px] text-ink-3">[</kbd>
+          </span>
         </button>
       </div>
     </nav>
@@ -138,15 +176,36 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Desktop: a fixed column that folds to an icon rail, with an engraved fine-line edge */}
+      {/* Desktop: the footprint narrows to a rail; the panel inside can peek open over the page */}
       <aside
         id="desktop-sidebar"
         data-rail
+        data-peek={collapsed && peek ? "" : undefined}
         aria-label="Application sidebar"
-        className="sticky top-0 hidden h-screen w-60 shrink-0 overflow-hidden border-r border-line bg-paper-raised transition-[width] duration-300 ease-[var(--ease-out-expo)] collapsed:w-[72px] lg:flex lg:flex-col"
+        onMouseEnter={() => collapsed && schedulePeek(true, 160)}
+        onMouseLeave={() => schedulePeek(false, 240)}
+        onFocus={() => collapsed && schedulePeek(true, 0)}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node)) schedulePeek(false, 0);
+        }}
+        className="group/rail sticky top-0 z-40 hidden h-screen w-60 shrink-0 transition-[width] duration-[460ms] ease-[var(--ease-out-expo)] folded:w-[72px] motion-reduce:transition-none lg:block"
       >
-        {navContent}
-        <span aria-hidden="true" className="fine-lines absolute inset-y-0 right-0 w-1.5 border-l border-line" />
+        <div className="absolute inset-y-0 left-0 w-60 border-r border-line bg-paper-raised transition-[width,box-shadow] duration-[460ms] ease-[var(--ease-out-expo)] collapsed:w-[72px] group-data-[peek]/rail:shadow-[18px_0_44px_-18px_rgb(var(--shadow-color)/0.4)] motion-reduce:transition-none">
+          <div className="h-full overflow-hidden">{navContent}</div>
+
+          {/* The engraved edge is the handle: hover reveals the tab, click folds or unfolds */}
+          <span aria-hidden="true" className="fine-lines absolute inset-y-0 right-0 w-1.5 border-l border-line transition-colors group-hover/rail:border-line-strong" />
+          <button
+            type="button"
+            onClick={toggle}
+            tabIndex={-1}
+            aria-hidden="true"
+            title={collapsed ? (peek ? "Keep open  [" : "Unfold  [") : "Fold  ["}
+            className="absolute right-0 top-1/2 z-10 flex h-12 w-5 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-sm border border-line-strong bg-paper-raised text-ink-3 opacity-0 shadow-[0_6px_16px_-8px_rgb(var(--shadow-color)/0.45)] transition-[opacity,color,transform] duration-200 hover:text-ink group-hover/rail:opacity-100"
+          >
+            {collapsed ? <CaretRight size={12} weight="bold" /> : <CaretLeft size={12} weight="bold" />}
+          </button>
+        </div>
       </aside>
 
       {/* Mobile drawer */}

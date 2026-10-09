@@ -42,9 +42,12 @@
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 
-/* Desktop sidebar folded to an icon rail: html[data-sidebar="collapsed"], set before paint.
-   Scoped to [data-rail] so the mobile drawer and other brand marks are unaffected. */
-@custom-variant collapsed (&:where(:root[data-sidebar="collapsed"] [data-rail], :root[data-sidebar="collapsed"] [data-rail] *));
+/* Desktop sidebar folded to a rail: html[data-sidebar="collapsed"], set before paint.
+   Scoped to [data-rail] so the mobile drawer and other brand marks are unaffected.
+   folded:    the rail's footprint in the layout (stays narrow while peeking)
+   collapsed: the rail's look, unless the folded rail is peeking open on hover/focus */
+@custom-variant folded (&:where(:root[data-sidebar="collapsed"] [data-rail]));
+@custom-variant collapsed (&:where(:root[data-sidebar="collapsed"] [data-rail]:not([data-peek]), :root[data-sidebar="collapsed"] [data-rail]:not([data-peek]) *));
 
 /* Theme switch: the incoming theme washes across the page along the hatching
    angle with a feathered edge, like ink drawn over paper (see ThemeToggle). */
@@ -297,6 +300,31 @@ textarea::placeholder {
   }
   .input[aria-invalid="true"] { border-color: var(--serial); }
   .input:disabled { background: var(--paper-sunk); color: var(--ink-3); cursor: not-allowed; }
+
+  /* Rail labels fold back toward the spine like a note creasing, then return */
+  .fold-label {
+    transform-origin: left center;
+    transition:
+      opacity 260ms var(--ease-out-expo) 90ms,
+      transform 460ms var(--ease-out-expo) 60ms;
+  }
+  :root[data-sidebar="collapsed"] [data-rail]:not([data-peek]) .fold-label {
+    opacity: 0;
+    transform: perspective(320px) rotateY(-70deg) translateX(-4px);
+    transition-delay: 0ms;
+  }
+  .fold-rule {
+    opacity: 0;
+    transition: opacity 260ms var(--ease-out-expo);
+  }
+  :root[data-sidebar="collapsed"] [data-rail]:not([data-peek]) .fold-rule {
+    opacity: 1;
+    transition-delay: 160ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fold-label,
+    .fold-rule { transition: none; }
+  }
 
   .field-error { margin-top: 0.375rem; font-size: 13px; color: var(--serial); }
   .field-hint { margin-top: 0.375rem; font-size: 13px; color: var(--ink-3); }
