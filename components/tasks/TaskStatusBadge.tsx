@@ -4,76 +4,43 @@ import type { TaskResponse } from "@/lib/api/taskApi";
 type Status = TaskResponse["status"];
 type Priority = TaskResponse["priority"];
 
-// ── Status config ─────────────────────────────────────────────────────────
-const STATUS_CONFIG: Record<
-  Status,
-  { label: string; badge: string; dot: string }
-> = {
-  PENDING: {
-    label: "Pending",
-    badge: "bg-amber-50 text-amber-700 border-amber-200",
-    dot: "bg-amber-500",
-  },
-  SUBMITTED: {
-    label: "Submitted",
-    badge: "bg-indigo-50 text-indigo-700 border-indigo-200",
-    dot: "bg-indigo-500",
-  },
-  APPROVED: {
-    label: "Approved",
-    badge: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    dot: "bg-emerald-500",
-  },
-  REJECTED: {
-    label: "Rejected",
-    badge: "bg-rose-50 text-rose-700 border-rose-200",
-    dot: "bg-rose-500",
-  },
+// Status reads like an overprint on a note: square, small caps, one ink per state.
+// Bronze is reserved for "Submitted", the state waiting on a countersignature.
+const STATUS_CONFIG: Record<Status, { label: string; className: string }> = {
+  PENDING: { label: "Pending", className: "text-ink-2 border-line-strong bg-paper-sunk" },
+  SUBMITTED: { label: "Submitted", className: "text-seal-ink border-seal bg-seal-tint" },
+  APPROVED: { label: "Approved", className: "text-note-ink border-note-ink/60 bg-note-tint" },
+  REJECTED: { label: "Rejected", className: "text-serial border-serial/60 bg-serial-tint" },
 };
 
-// ── Priority config ───────────────────────────────────────────────────────
-const PRIORITY_CONFIG: Record<
-  Priority,
-  { label: string; badge: string }
-> = {
-  HIGH: {
-    label: "High",
-    badge: "bg-rose-50 text-rose-700 border-rose-200 font-semibold",
-  },
-  MEDIUM: {
-    label: "Medium",
-    badge: "bg-amber-50 text-amber-700 border-amber-200 font-medium",
-  },
-  LOW: {
-    label: "Low",
-    badge: "bg-slate-100 text-slate-600 border-slate-200 font-medium",
-  },
+const PRIORITY_CONFIG: Record<Priority, { label: string; className: string; bars: number }> = {
+  HIGH: { label: "High", className: "text-serial", bars: 3 },
+  MEDIUM: { label: "Medium", className: "text-seal-ink", bars: 2 },
+  LOW: { label: "Low", className: "text-ink-3", bars: 1 },
 };
 
-// ── StatusBadge ───────────────────────────────────────────────────────────
 export function StatusBadge({ status }: { status: Status }) {
   const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG.PENDING;
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs border ${cfg.badge}`}
-    >
-      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${cfg.dot}`} aria-hidden="true" />
+    <span className={`caps inline-flex items-center h-6 px-2 rounded-sm border ${cfg.className}`}>
       {cfg.label}
     </span>
   );
 }
 
-// ── PriorityBadge ─────────────────────────────────────────────────────────
+/** Priority as engraved weight marks: one, two or three rules. */
 export function PriorityBadge({ priority }: { priority: Priority }) {
   const cfg = PRIORITY_CONFIG[priority] ?? PRIORITY_CONFIG.MEDIUM;
   return (
-    <span
-      className={`inline-block px-2.5 py-0.5 rounded text-xs border ${cfg.badge}`}
-    >
+    <span className={`caps inline-flex items-center gap-1.5 ${cfg.className}`}>
+      <span className="inline-flex flex-col gap-[2px]" aria-hidden="true">
+        {[3, 2, 1].map((n) => (
+          <span key={n} className={`block h-[2px] w-3 bg-current ${n > cfg.bars ? "opacity-20" : ""}`} />
+        ))}
+      </span>
       {cfg.label}
     </span>
   );
 }
 
-// Re-export config for reuse
 export { STATUS_CONFIG, PRIORITY_CONFIG };
